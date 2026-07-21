@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 0px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #c0f252;
+      }
+
+      .cls-2 {
+        font-family: NeuzeitGro-Bol, 'Neuzeit Grotesk';
+        font-size: 65.72px;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(152.54 336.35) rotate(-67.7)"><tspan x="0" y="0">C</tspan></text>
+  <text class="cls-2" transform="translate(172.04 292.13) rotate(-50.09)"><tspan x="0" y="0">R</tspan></text>
+  <text class="cls-2" transform="translate(202.38 257.39) rotate(-31.94)"><tspan x="0" y="0">A</tspan></text>
+  <text class="cls-2" transform="translate(244.48 233.24) rotate(-15.74)"><tspan x="0" y="0">F</tspan></text>
+  <text class="cls-2" transform="translate(282.91 223.64) rotate(-.7)"><tspan x="0" y="0">T</tspan></text>
+  <text class="cls-2" transform="translate(321.46 224.68) rotate(11.97)"><tspan x="0" y="0"> </tspan></text>
+  <text class="cls-2" transform="translate(348.68 230.35) rotate(25.77)"><tspan x="0" y="0">B</tspan></text>
+  <text class="cls-2" transform="translate(388.37 251.15) rotate(41.39)"><tspan x="0" y="0">E</tspan></text>
+  <text class="cls-2" transform="translate(416.3 277.07) rotate(55.95)"><tspan x="0" y="0">E</tspan></text>
+  <text class="cls-2" transform="translate(437.06 308.66) rotate(71.6)"><tspan x="0" y="0">R</tspan></text>
+  <path class="cls-1" d="M424.46,374.96h-63.44c-1.26,0-2.51.04-3.75.11-22.52,1.36-41.74,14.89-51.2,34.11-1.29,2.63-2.4,5.36-3.31,8.2-1.47,4.54-2.41,9.32-2.77,14.26-.37-4.88-1.31-9.6-2.76-14.08-.9-2.84-2.02-5.57-3.31-8.2-9.46-19.22-28.69-32.74-51.2-34.11-1.24-.08-2.49-.11-3.75-.11h-63.44c-.03.79-.05,1.6-.05,2.39,0,5.52.7,10.89,2.04,16,1.46,5.62,3.66,10.93,6.51,15.84,1.55,2.68,3.3,5.23,5.21,7.64,12.04,15.16,30.6,23.67,49.97,23.67h9.76c11.29,0,21.04,6.58,25.62,16.11,0,.03.7,1.59.71,1.61.6,1.25,1.3,2.43,2.07,3.57l-1.33,1.27c5.03,6.55,12.83,10.86,21.66,11.2,1.13.14,2.29.21,3.46.21,9.28,0,17.53-4.41,22.77-11.23l-1.48-1.41c.83-1.2,1.58-2.46,2.21-3.79,0-.02.7-1.58.71-1.61,4.58-9.52,14.33-16.11,25.62-16.11h9.76c19.36,0,37.92-8.51,49.97-23.67,1.92-2.41,3.66-4.96,5.21-7.64,2.85-4.9,5.05-10.22,6.51-15.84,1.33-5.11,2.04-10.47,2.04-16,0-.8-.02-1.61-.05-2.39Z"/>
+</svg>

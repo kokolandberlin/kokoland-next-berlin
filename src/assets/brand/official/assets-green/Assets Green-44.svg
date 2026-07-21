@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #134033;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-4 {
+        font-family: NeuzeitGro-Bla, 'Neuzeit Grotesk';
+        font-size: 17.57px;
+      }
+
+      .cls-4, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        font-size: 32.93px;
+      }
+
+      .cls-5, .cls-6 {
+        fill: #c0f252;
+        font-family: NeuzeitGro-Bol, 'Neuzeit Grotesk';
+      }
+
+      .cls-7 {
+        letter-spacing: .2em;
+      }
+
+      .cls-8 {
+        letter-spacing: .2em;
+      }
+
+      .cls-9 {
+        letter-spacing: .19em;
+      }
+
+      .cls-6 {
+        font-size: 36.35px;
+      }
+
+      .cls-2 {
+        fill: #02664c;
+      }
+
+      .cls-10 {
+        letter-spacing: .13em;
+      }
+
+      .cls-11 {
+        letter-spacing: .22em;
+      }
+
+      .cls-12 {
+        letter-spacing: .21em;
+      }
+
+      .cls-13 {
+        letter-spacing: .2em;
+      }
+
+      .cls-14 {
+        letter-spacing: .22em;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M300,216.85h0c59.41,0,107.65,48.23,107.65,107.65v54.17h-215.29v-54.17c0-59.41,48.23-107.65,107.65-107.65Z"/>
+  <text class="cls-6" transform="translate(236.37 327.33) rotate(-85.38)"><tspan x="0" y="0">.</tspan></text>
+  <text class="cls-5" transform="translate(237.02 315.64) rotate(-70.77)"><tspan x="0" y="0">K</tspan></text>
+  <text class="cls-5" transform="translate(242.94 297.3) rotate(-50.64)"><tspan x="0" y="0">O</tspan></text>
+  <text class="cls-5" transform="translate(260.32 277.41) rotate(-29.96)"><tspan x="0" y="0">K</tspan></text>
+  <text class="cls-5" transform="translate(276.79 267.38) rotate(-9.75)"><tspan x="0" y="0">O</tspan></text>
+  <text class="cls-5" transform="translate(303.07 263.97) rotate(9.36)"><tspan x="0" y="0">L</tspan></text>
+  <text class="cls-5" transform="translate(320.09 266.68) rotate(27.56)"><tspan x="0" y="0">A</tspan></text>
+  <text class="cls-5" transform="translate(339.71 277.01) rotate(48.16)"><tspan x="0" y="0">N</tspan></text>
+  <text class="cls-5" transform="translate(355.46 295.17) rotate(68.96)"><tspan x="0" y="0">D</tspan></text>
+  <text class="cls-6" transform="translate(362.68 316.78) rotate(84.38)"><tspan x="0" y="0">.</tspan></text>
+  <path class="cls-3" d="M333.76,312.64l-.11.19c-.78,1.39-2.26,2.26-3.86,2.26-.07,0-.13,0-.2,0v-8.28c0-.26-.01-.51-.02-.75-.09-2.03-.45-4.02-1.07-5.92-.33-1.02-.74-2.04-1.23-3.05-3.6-7.32-10.89-12.17-19.01-12.66-.46-.03-.93-.04-1.39-.04h-23.54v.17c-.02.29-.02.59-.02.89,0,1.98.25,3.93.73,5.82-6.96,4.24-12.72,10.25-16.65,17.37-3.58,6.48-5.53,13.53-5.79,20.95v.18s19.04,0,19.04,0l.03-.13c1-4.15,3.96-7.62,7.9-9.29,1.62-.68,3.33-1.04,5.09-1.06v10.48h17.07v-20.88c3.87.07,7.43,2.34,9.11,5.82,0,.02.26.6.27.61,1.06,2.19,2.85,3.98,5.05,5.04,1.45.7,3.01,1.05,4.63,1.05,3.37,0,6.48-1.53,8.53-4.21l.09-.12-4.65-4.43Z"/>
+  <rect class="cls-2" x="192.27" y="342.32" width="215.46" height="40.83"/>
+  <text class="cls-4" transform="translate(205.7 370.21)"><tspan class="cls-7" x="0" y="0">P</tspan><tspan class="cls-9" x="13.42" y="0">R</tspan><tspan class="cls-8" x="27.3" y="0">OUD</tspan><tspan class="cls-10" x="74.08" y="0">L</tspan><tspan class="cls-8" x="84.48" y="0">Y B</tspan><tspan class="cls-14" x="120.55" y="0">R</tspan><tspan class="cls-12" x="134.91" y="0">E</tspan><tspan class="cls-11" x="146.7" y="0">W</tspan><tspan class="cls-13" x="165.64" y="0">ED</tspan></text>
+</svg>

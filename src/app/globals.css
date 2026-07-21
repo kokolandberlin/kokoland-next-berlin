@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream text-forest font-sans antialiased;
+    cursor: none;
+  }
+
+  @media (pointer: coarse) {
+    body {
+      cursor: auto;
+    }
+  }
+
+  ::selection {
+    @apply bg-lime text-forest;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-forest;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-lime rounded-full;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  /* Soft tropical grain */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Friendly chunky shadow */
+  .soft-shadow {
+    box-shadow: 0 18px 40px -18px rgba(19, 64, 51, 0.45);
+  }
+  .pop-shadow-lime {
+    box-shadow: 6px 6px 0 0 #c0f252;
+  }
+  .pop-shadow-forest {
+    box-shadow: 6px 6px 0 0 #134033;
+  }
+
+  /* Rounded arch shape for image frames */
+  .arch-top {
+    border-top-left-radius: 9999px;
+    border-top-right-radius: 9999px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Style 2 "Bazaar" — global tweaks driven by [data-style="bazaar"] on <html>.
+   Gives the asset-rich spice-market look a chunkier, grittier personality
+   without touching every component's classes.
+--------------------------------------------------------------------------- */
+[data-style="bazaar"] .soft-shadow {
+  box-shadow: 6px 6px 0 0 rgba(19, 64, 51, 0.9);
+}
+[data-style="bazaar"] .grain::after {
+  opacity: 0.07;
+}
+[data-style="bazaar"] ::selection {
+  background-color: #f21b07;
+  color: #f6f4ea;
+}
+[data-style="bazaar"] ::-webkit-scrollbar-thumb {
+  background-color: #f21b07;
+}
