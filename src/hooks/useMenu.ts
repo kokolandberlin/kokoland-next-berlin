@@ -12,6 +12,8 @@ type UseMenu = {
   loading: boolean;
   // "live" when served from DishData, "fallback" when the static list is used
   source: "live" | "fallback";
+  /** Name of the event menu currently driving the site, when one is public. */
+  eventMenuName: string | null;
 };
 
 // Public menu — reads active recipes from DishData (the actual POS menu
@@ -23,6 +25,7 @@ export const useMenu = (): UseMenu => {
   const [dishes, setDishes] = useState<Dish[]>(staticDishes);
   const [loading, setLoading] = useState(true);
   const [source, setSource] = useState<"live" | "fallback">("fallback");
+  const [eventMenuName, setEventMenuName] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -50,20 +53,47 @@ export const useMenu = (): UseMenu => {
         return;
       }
 
-      const { data, error } = await supabase
+      // An event menu marked "show on website" takes over the public menu while
+      // it's active (e.g. a popup or tournament). RLS only exposes active+public
+      // ones to anon, so this returns nothing for staff-only event menus.
+      const { data: eventMenus } = await supabase
+        .from("event_menus")
+        .select("name, event_menu_items(recipe_id)")
+        .eq("org_id", org.id)
+        .eq("is_active", true)
+        .eq("show_on_website", true)
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (!active) return;
+      const eventMenu = eventMenus?.[0] as
+        | { name: string; event_menu_items: { recipe_id: string }[] }
+        | undefined;
+      const eventRecipeIds = (eventMenu?.event_menu_items ?? []).map((i) => i.recipe_id);
+
+      let recipesQuery = supabase
         .from("recipes")
         .select("id, name, category, price, emoji, image_url")
         .eq("org_id", org.id)
-        .eq("is_active", true)
-        .order("category");
+        .eq("is_active", true);
+
+      // Only narrow to the event menu if it actually has dishes — an empty one
+      // would otherwise blank the whole menu.
+      if (eventRecipeIds.length > 0) {
+        recipesQuery = recipesQuery.in("id", eventRecipeIds);
+      }
+
+      const { data, error } = await recipesQuery.order("category");
 
       if (!active) return;
       if (error || !data || data.length === 0) {
         setDishes(staticDishes);
         setSource("fallback");
+        setEventMenuName(null);
       } else {
         setDishes((data as DishDataRecipe[]).map(recipeToDish));
         setSource("live");
+        setEventMenuName(eventRecipeIds.length > 0 ? (eventMenu?.name ?? null) : null);
       }
       setLoading(false);
     })();
@@ -72,5 +102,5 @@ export const useMenu = (): UseMenu => {
     };
   }, []);
 
-  return { dishes, loading, source };
+  return { dishes, loading, source, eventMenuName };
 };
