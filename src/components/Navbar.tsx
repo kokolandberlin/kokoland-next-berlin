@@ -22,10 +22,10 @@ const links = [
   { key: "menu", href: "/menu" },
   { key: "reserve", href: "/#reservation" },
   { key: "catering", href: "/#catering" },
-  { key: "events", href: "/#events" },
   // The blog is built but parked: set to true to show it in the menu again.
   ...(SHOW_BLOG ? [{ key: "blog", href: "/blog" }] : []),
   { key: "contact", href: "/#contact" },
+  { key: "events", href: "/#events" },
 ];
 
 const Navbar = () => {

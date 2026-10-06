@@ -25,6 +25,7 @@ const strings = (de: boolean) =>
     ? {
         how: "Wie möchtest du dein Essen bekommen?",
         soon: "Bald",
+        leadHint: "Wir kochen passend zu deiner Zeit. Bitte wähle mindestens 30 Minuten im Voraus.",
         tableSend: "An die Küche senden",
         tableName: (t: string) => `Tisch ${t}`,
         tableOptionalName: "Name (optional)",
@@ -41,7 +42,7 @@ const strings = (de: boolean) =>
         toPayment: "Weiter zur Zahlung …",
         orderPage: "Deine Bestellung ansehen",
         payPending: "Deine Bestellung ist angelegt, die Zahlung steht noch aus. Öffne die Bestellseite, um zu bezahlen.",
-        checkInNote: "Tippe auf der Bestellseite „Ich bin in 10 Minuten da“, dann fangen wir an zu kochen.",
+        checkInNote: "Tippe auf der Bestellseite „Ich bin unterwegs“, damit die Küche weiß, dass du kommst.",
         deliveryVia: "Lieferung bei uns kommt bald. Bis dahin bestellst du sie über:",
         dineIn: "Vor Ort essen",
         dineInHint: "Bestell vor, wir reservieren deinen Tisch und das Essen ist fertig, wenn du dich setzt. Keine Wartezeit.",
@@ -66,6 +67,7 @@ const strings = (de: boolean) =>
     : {
         how: "How would you like to receive your order?",
         soon: "Soon",
+        leadHint: "We cook to your time, so please pick a time at least 30 minutes ahead.",
         tableSend: "Send to the kitchen",
         tableName: (t: string) => `Table ${t}`,
         tableOptionalName: "Name (optional)",
@@ -82,7 +84,7 @@ const strings = (de: boolean) =>
         toPayment: "Taking you to payment…",
         orderPage: "View your order",
         payPending: "Your order is saved but not paid yet. Open your order page to pay.",
-        checkInNote: "On your order page, tap \"I'm 10 minutes away\" and we start cooking.",
+        checkInNote: "On your order page, tap \"I'm on my way\" so the kitchen knows you are coming.",
         deliveryVia: "Delivery from us is coming soon. Until then, order delivery on:",
         dineIn: "Dine in",
         dineInHint: "Order ahead and we book your table. Your food is ready when you sit down. No waiting.",
@@ -546,6 +548,7 @@ const CheckoutModal = ({ open, onClose, onSuccess }: Props) => {
                                 </select>
                               </label>
                             </div>
+                            <p className="text-xs text-cream/50">{x.leadHint}</p>
                             {closed && <p className="text-sm text-chili-text">{x.closedDay}</p>}
                             {!closed && date && slots.length === 0 && <p className="text-sm text-chili-text">{x.noSlots}</p>}
                           </div>

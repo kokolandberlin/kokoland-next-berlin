@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useFollowActiveChip } from "@/hooks/useFollowActiveChip";
+import CategorySheet, { CategoryButton } from "@/components/CategorySheet";
 import {
   AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform,
 } from "framer-motion";
@@ -151,7 +153,7 @@ const INDO_CHINESE = /manchurian|chilli|chilly|schezwan|szechuan|noodle|fried ri
 const HERO_PLATES: PlateSpot[] = [
   { photo: plates.kappaFish, left: "66%", top: "10%", vw: 25, min: 150, max: 380, drift: 80, spin: 45, tilt: 8 },
   { photo: plates.porottaBeef, left: "78%", top: "46%", vw: 20, min: 130, max: 320, drift: 110, spin: -55, tilt: -10 },
-  { photo: plates.kadala, left: "58%", top: "64%", vw: 13, min: 90, max: 210, drift: 60, spin: 70, tilt: 0, desktopOnly: true },
+  { photo: plates.biriyani, left: "58%", top: "62%", vw: 14, min: 96, max: 230, drift: 60, spin: 70, tilt: 0, desktopOnly: true },
   { photo: plates.samosa, left: "88%", top: "6%", vw: 11, min: 80, max: 190, drift: 50, spin: -40, tilt: 14, desktopOnly: true },
 ];
 
@@ -384,6 +386,9 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
   const [diet, setDiet] = useState<"all" | "veg" | "vegan">("all");
   const [street, setStreet] = useState(false);
   const [activeCat, setActiveCat] = useState("");
+  const chipBar = useRef<HTMLElement>(null);
+  const [catsOpen, setCatsOpen] = useState(false);
+  useFollowActiveChip(chipBar, activeCat);
   const [quick, setQuick] = useState<MenuDish | null>(null);
 
   // ---- hero scroll effect
@@ -715,16 +720,26 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
                   {t.streetOn} <X className="h-4 w-4" />
                 </button>
               )}
-              <nav aria-label="Categories" className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+              <div className="flex items-center gap-2">
+              <CategoryButton onClick={() => setCatsOpen(true)} />
+              <nav ref={chipBar} aria-label="Categories" className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
                 {groups.map((g) => (
-                  <a key={g.key} href={`#cat-${slug(g.key)}`} className="relative flex shrink-0 items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold">
+                  <a key={g.key} href={`#cat-${slug(g.key)}`} data-active={activeCat === g.key} className="relative flex shrink-0 items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold">
                     {activeCat === g.key && <motion.span layoutId="cat-pill" className="absolute inset-0 rounded-full" style={{ background: themes[g.key]?.bg }} transition={{ type: "spring", stiffness: 400, damping: 32 }} />}
                     <span className="relative z-10 h-2.5 w-2.5 rounded-full" style={{ background: activeCat === g.key ? themes[g.key]?.fg : themes[g.key]?.bg }} />
                     <span className={`relative z-10 ${activeCat === g.key ? "" : "text-cream/75 hover:text-cream"}`} style={activeCat === g.key ? { color: themes[g.key]?.fg } : undefined}>{shortLabel(g.key)}</span>
                   </a>
                 ))}
               </nav>
+              </div>
             </div>
+            <CategorySheet
+              open={catsOpen}
+              onClose={() => setCatsOpen(false)}
+              activeKey={activeCat}
+              items={allCats.map((c) => ({ key: c, label: shortLabel(c), count: countOf(c), image: menu.dishes.find((d) => d.category === c && d.image_url)?.image_url ?? null, emoji: menu.dishes.find((d) => d.category === c && d.emoji)?.emoji ?? null }))}
+              onPick={jump}
+            />
           </div>
 
           <div className="mx-auto max-w-7xl px-5 pb-40 pt-12">
@@ -873,13 +888,13 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 sm:px-5"
           >
-            <div className="soft-shadow mx-auto flex max-w-3xl items-center gap-4 rounded-full border-2 border-lime bg-forest px-5 py-3 text-cream">
-              <ShoppingBag className="h-6 w-6 shrink-0 text-lime" />
+            <div className="soft-shadow mx-auto flex max-w-xl items-center gap-3 rounded-full border-2 border-lime bg-forest px-4 py-2 text-cream">
+              <ShoppingBag className="h-5 w-5 shrink-0 text-lime" />
               <div className="min-w-0 flex-1 leading-tight">
                 <div className="text-xs text-cream/65">{t.items(count)}</div>
-                <div className="font-display text-xl font-extrabold text-lime">{money(total)}</div>
+                <div className="font-display text-lg font-extrabold text-lime">{money(total)}</div>
               </div>
-              <button onClick={() => setOpen(true)} className="shrink-0 rounded-full bg-lime px-5 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-cream">{t.viewOrder}</button>
+              <button onClick={() => setOpen(true)} className="shrink-0 rounded-full bg-lime px-4 py-1.5 text-sm font-bold text-forest transition-colors hover:bg-cream">{t.viewOrder}</button>
             </div>
           </motion.div>
         )}

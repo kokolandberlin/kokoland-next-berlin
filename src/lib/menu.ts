@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { DISHDATA_SLUG } from "@/lib/supabase";
 import { dishes as staticDishes } from "@/data/menu";
-import { photoForDish } from "@/data/food-photos";
+import { photoForDish, looseDishPhoto } from "@/data/food-photos";
 
 // The public menu as the /menu page and the home glimpse see it: live dishes
 // from DishData plus the week's featured dishes (planned in Marketing → This
@@ -52,8 +52,8 @@ export function mapRecipe(r: Record<string, unknown>): MenuDish {
     category_de: (r.category_de as string | null) ?? null,
     price: Number(r.price) || 0,
     emoji: (r.emoji as string | null) ?? null,
-    // A photo uploaded in DishData wins; otherwise a studio photo matched by name.
-    image_url: (r.image_url as string | null) ?? photoForDish(String(r.name))?.src ?? null,
+    // Our studio photo of the exact dish first, then the photo held in DishData, then a near match.
+    image_url: photoForDish(String(r.name))?.src ?? (r.image_url as string | null) ?? looseDishPhoto(String(r.name))?.src ?? null,
     diet: (r.diet as MenuDish["diet"]) ?? null,
     soldOut: until > Date.now(),
   };

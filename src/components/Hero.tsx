@@ -23,7 +23,7 @@ const Hero = () => {
     <section
       id="top"
       ref={ref}
-      className="relative min-h-screen overflow-hidden bg-forest text-cream pt-28 pb-16"
+      className="relative min-h-[100svh] overflow-hidden bg-forest text-cream pt-28 pb-28 lg:pb-16"
     >
       {/* Decorative motifs */}
       <Motif
@@ -42,7 +42,7 @@ const Hero = () => {
       {/* Style 2 "Bazaar": scattered spice/protein stamps */}
       <StampField variant="hero" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 grid lg:grid-cols-12 gap-10 items-center min-h-[78vh]">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 grid lg:grid-cols-12 gap-9 lg:gap-10 items-center lg:min-h-[78vh]">
         {/* Headline */}
         <motion.div style={{ y: textY }} className="lg:col-span-7">
           <motion.div
@@ -77,7 +77,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85 }}
-            className="mt-7 max-w-xl text-lg text-cream/75"
+            className="mt-5 lg:mt-7 max-w-xl text-base sm:text-lg text-cream/75"
           >
             {t("hero.sub")}
           </motion.p>
@@ -86,12 +86,12 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0 }}
-            className="mt-9 flex flex-wrap gap-4"
+            className="mt-7 lg:mt-9 flex flex-wrap gap-3 lg:gap-4"
           >
             <Magnetic>
               <Link
                 href="/menu"
-                className="inline-flex items-center gap-2 bg-lime text-forest font-semibold text-lg rounded-full px-8 py-4 hover:bg-cream transition-colors soft-shadow"
+                className="inline-flex items-center gap-2 bg-lime text-forest font-semibold text-base sm:text-lg rounded-full px-6 sm:px-8 py-3.5 sm:py-4 hover:bg-cream transition-colors soft-shadow"
               >
                 {t("hero.order")}
                 <ArrowRight className="w-5 h-5" />
@@ -100,7 +100,7 @@ const Hero = () => {
             <Magnetic>
               <a
                 href="#about"
-                className="inline-flex items-center gap-2 border-2 border-cream/40 text-cream font-semibold text-lg rounded-full px-8 py-4 hover:border-lime hover:text-lime transition-colors"
+                className="inline-flex items-center gap-2 border-2 border-cream/40 text-cream font-semibold text-base sm:text-lg rounded-full px-6 sm:px-8 py-3.5 sm:py-4 hover:border-lime hover:text-lime transition-colors"
               >
                 {t("hero.story")}
               </a>
@@ -113,7 +113,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.5 }}
-          className="lg:col-span-5 relative"
+          className="lg:col-span-5 relative mx-auto w-[82%] max-w-sm sm:max-w-md lg:max-w-none lg:w-full"
         >
           <motion.div
             style={{ y: imgY }}
@@ -122,14 +122,14 @@ const Hero = () => {
             <motion.img
               src={heroFood}
               alt="Kerala feast at kokoland"
-              className="w-full h-[520px] lg:h-[660px] object-cover object-[50%_34%]"
+              className="w-full h-[300px] sm:h-[420px] lg:h-[660px] object-cover object-[50%_30%]"
               whileHover={{ scale: 1.06 }}
               transition={{ duration: 0.6 }}
             />
           </motion.div>
 
           {/* Rotating stamp */}
-          <div className="absolute -top-8 -left-8 w-28 h-28 lg:w-36 lg:h-36">
+          <div className="absolute -top-7 -left-6 w-24 h-24 lg:-top-8 lg:-left-8 lg:w-36 lg:h-36">
             <div className="relative w-full h-full animate-spin-slow">
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
@@ -149,7 +149,7 @@ const Hero = () => {
           {/* Floating elephant */}
           <Motif
             name="elephants"
-            className="absolute -bottom-6 -right-4 w-32 lg:w-40 text-chili animate-float"
+            className="absolute -bottom-5 -right-3 w-24 sm:w-32 lg:w-40 text-chili animate-float"
           />
         </motion.div>
       </div>

@@ -22,9 +22,9 @@ const navLinks = [
   { key: "onam", h: "/onam-sadhya" },
   { key: "catering", h: "/#catering" },
   { key: "reserve", h: "/#reservation" },
-  { key: "events", h: "/#events" },
   { key: "blog", h: "/blog" },
   { key: "contact", h: "/#contact" },
+  { key: "events", h: "/#events" },
 ];
 
 const Footer = () => {

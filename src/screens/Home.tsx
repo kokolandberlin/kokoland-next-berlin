@@ -26,9 +26,9 @@ const Home = () => (
       <FriezeDivider />
       <Reservation />
       <Catering />
-      <Events />
       <FriezeDivider />
       <Contact />
+      <Events />
     </main>
     <FriezeDivider ornate />
     <Footer />

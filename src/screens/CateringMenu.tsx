@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useFollowActiveChip } from "@/hooks/useFollowActiveChip";
+import CategorySheet, { CategoryButton } from "@/components/CategorySheet";
+import { isCutout } from "@/components/DishVisual";
+import { photoForDish, looseDishPhoto } from "@/data/food-photos";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Minus, Plus, ShoppingBag, X } from "lucide-react";
@@ -170,8 +174,15 @@ const CateringMenuScreen = ({ menu }: { menu: CateringMenu | null }) => {
   const [qty, setQty] = useState<Record<string, number>>({});
   const [open, setOpen] = useState(false);
   const [activeCat, setActiveCat] = useState<string>("");
+  const chipBar = useRef<HTMLElement>(null);
+  const [catsOpen, setCatsOpen] = useState(false);
+  useFollowActiveChip(chipBar, activeCat);
 
-  const dishes = useMemo(() => menu?.dishes ?? [], [menu]);
+  // Our studio photo of the exact dish first, then DishData's photo, then a near match.
+  const dishes = useMemo(
+    () => (menu?.dishes ?? []).map((d) => ({ ...d, image_url: photoForDish(d.name)?.src ?? d.image_url ?? looseDishPhoto(d.name)?.src ?? null })),
+    [menu],
+  );
   const tiers = useMemo(() => menu?.tiers ?? [], [menu]);
 
   const groups = useMemo(() => {
@@ -320,11 +331,14 @@ const CateringMenuScreen = ({ menu }: { menu: CateringMenu | null }) => {
             {/* ------------------------------ Menu ----------------------------- */}
             <section id="menu" className="relative bg-forest-700 pb-40 text-cream">
               <div className="sticky top-[68px] z-30 border-b border-lime/15 bg-forest-700/95 backdrop-blur-md">
-                <nav aria-label={t.categories} className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-3 [scrollbar-width:none]">
+                <div className="mx-auto flex max-w-7xl items-center gap-2 px-5 py-3">
+                <CategoryButton onClick={() => setCatsOpen(true)} />
+                <nav ref={chipBar} aria-label={t.categories} className="flex min-w-0 flex-1 gap-2 overflow-x-auto [scrollbar-width:none]">
                   {groups.map((g) => (
                     <a
                       key={g.key}
                       href={`#cat-${slug(g.key)}`}
+                      data-active={activeCat === g.key}
                       className={`shrink-0 rounded-full border-2 px-4 py-1.5 text-sm font-semibold transition-colors ${
                         activeCat === g.key ? "border-lime bg-lime text-forest" : "border-cream/15 text-cream/80 hover:border-lime hover:text-lime"
                       }`}
@@ -333,13 +347,22 @@ const CateringMenuScreen = ({ menu }: { menu: CateringMenu | null }) => {
                     </a>
                   ))}
                 </nav>
+                </div>
               </div>
+
+              <CategorySheet
+                open={catsOpen}
+                onClose={() => setCatsOpen(false)}
+                activeKey={activeCat}
+                items={groups.map((g) => ({ key: g.key, label: g.label, count: g.dishes.length, image: g.dishes.find((d) => d.image_url)?.image_url ?? null, emoji: g.dishes.find((d) => d.emoji)?.emoji ?? null }))}
+                onPick={(k) => document.getElementById(`cat-${slug(k)}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              />
 
               <div className="mx-auto max-w-7xl px-5 pt-12">
                 {groups.map((g) => (
                   <div key={g.key} id={`cat-${slug(g.key)}`} data-cat={g.key} className="scroll-mt-40 pb-14">
                     <h2 className="mb-6 font-display text-3xl font-extrabold text-lime lg:text-4xl">{g.label}</h2>
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
                       {g.dishes.map((d) => (
                         <DishCard key={d.id} dish={d} qty={qty[d.id] ?? 0} setQty={(n) => setDishQty(d.id, n)} name={pick(d.name_de, d.name)} desc={pick(d.description_de, d.description)} price={money(d.price)} t={t} />
                       ))}
@@ -363,19 +386,19 @@ const CateringMenuScreen = ({ menu }: { menu: CateringMenu | null }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 sm:px-5"
           >
-            <div className="soft-shadow mx-auto flex max-w-3xl items-center gap-4 rounded-full border-2 border-lime bg-forest px-5 py-3 text-cream">
-              <ShoppingBag className="h-6 w-6 shrink-0 text-lime" />
+            <div className="soft-shadow mx-auto flex max-w-xl items-center gap-3 rounded-full border-2 border-lime bg-forest px-4 py-2 text-cream">
+              <ShoppingBag className="h-5 w-5 shrink-0 text-lime" />
               <div className="min-w-0 flex-1 leading-tight">
                 <div className="truncate text-xs text-cream/65">
                   {t.items(itemCount)}
                   {discountPct > 0 ? ` · ${discountPct}% ${t.off}` : ""}
                 </div>
-                <div className="font-display text-xl font-extrabold text-lime">
+                <div className="font-display text-lg font-extrabold text-lime">
                   {discountPct > 0 && <span className="mr-2 text-sm font-semibold text-cream/50 line-through">{money(subtotal)}</span>}
                   {money(total)}
                 </div>
               </div>
-              <button onClick={() => setOpen(true)} className="shrink-0 rounded-full bg-lime px-5 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-cream">
+              <button onClick={() => setOpen(true)} className="shrink-0 rounded-full bg-lime px-4 py-1.5 text-sm font-bold text-forest transition-colors hover:bg-cream">
                 {t.request}
               </button>
             </div>
@@ -413,35 +436,41 @@ const DishCard = ({
   <div className={`flex flex-col overflow-hidden rounded-3xl border-2 transition-colors ${qty > 0 ? "border-lime bg-forest" : "border-cream/10 bg-forest/40"}`}>
     {dish.image_url ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={dish.image_url} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+      isCutout(dish.image_url) ? (
+        <div className="flex aspect-[16/10] w-full items-center justify-center bg-[#F8B5A0]/90 p-2">
+          <img src={dish.image_url} alt="" loading="lazy" className="h-full w-full object-contain drop-shadow-[0_8px_10px_rgba(19,64,51,0.25)]" />
+        </div>
+      ) : (
+        <img src={dish.image_url} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
+      )
     ) : (
-      <div className="flex aspect-[4/3] w-full items-center justify-center bg-lime/10 text-6xl" aria-hidden>
-        {dish.emoji || <Symbol name="greens" className="h-14 w-14 text-lime/60" />}
+      <div className="flex aspect-[16/10] w-full items-center justify-center bg-lime/10 text-5xl" aria-hidden>
+        {dish.emoji || <Symbol name="greens" className="h-12 w-12 text-lime/60" />}
       </div>
     )}
-    <div className="flex flex-1 flex-col p-5">
+    <div className="flex flex-1 flex-col p-3 sm:p-4">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg font-bold leading-snug">{name}</h3>
-        <span className="shrink-0 font-display font-extrabold text-lime">{price}</span>
+        <h3 className="font-display text-sm font-bold leading-snug sm:text-base">{name}</h3>
+        <span className="shrink-0 font-display text-sm font-extrabold text-lime sm:text-base">{price}</span>
       </div>
       {dish.diet && (
-        <span className="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-lime/15 px-2.5 py-0.5 text-[11px] font-semibold text-lime">
+        <span className="mt-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-lime/15 px-2 py-0.5 text-[10px] font-semibold text-lime">
           {dish.diet === "vegan" ? "🌱 " + t.vegan : "🟢 " + t.veg}
         </span>
       )}
-      {desc && <p className="mt-2 line-clamp-3 text-sm text-cream/65">{desc}</p>}
-      <div className="mt-auto pt-4">
+      {desc && <p className="mt-1.5 line-clamp-2 text-xs text-cream/65 sm:text-[13px]">{desc}</p>}
+      <div className="mt-auto pt-3">
         {qty === 0 ? (
-          <button onClick={() => setQty(1)} className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-lime px-4 py-2 text-sm font-bold text-lime transition-colors hover:bg-lime hover:text-forest">
-            <Plus className="h-4 w-4" /> {t.add}
+          <button onClick={() => setQty(1)} className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-lime px-3 py-1 text-xs font-bold text-lime transition-colors hover:bg-lime hover:text-forest sm:text-sm">
+            <Plus className="h-3.5 w-3.5" /> {t.add}
           </button>
         ) : (
-          <div className="flex items-center justify-between rounded-full bg-lime px-2 py-1 text-forest">
-            <button onClick={() => setQty(qty - 1)} aria-label={`${t.less}: ${name}`} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-forest hover:text-lime">
-              <Minus className="h-4 w-4" />
+          <div className="flex items-center justify-between rounded-full bg-lime px-1.5 py-0.5 text-forest">
+            <button onClick={() => setQty(qty - 1)} aria-label={`${t.less}: ${name}`} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-forest hover:text-lime">
+              <Minus className="h-3.5 w-3.5" />
             </button>
-            <span className="font-display text-lg font-extrabold" aria-live="polite">{qty}</span>
-            <button onClick={() => setQty(qty + 1)} aria-label={`${t.more}: ${name}`} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-forest hover:text-lime">
+            <span className="font-display text-base font-extrabold" aria-live="polite">{qty}</span>
+            <button onClick={() => setQty(qty + 1)} aria-label={`${t.more}: ${name}`} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-forest hover:text-lime">
               <Plus className="h-4 w-4" />
             </button>
           </div>

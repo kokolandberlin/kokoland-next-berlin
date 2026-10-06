@@ -36,6 +36,9 @@ i18n
       pl: { translation: pl },
       pt: { translation: pt },
     },
+    // Start in English on server AND client so the first render matches (no hydration error);
+    // LanguageSync (in providers.tsx) then switches to the visitor's saved or browser language.
+    lng: "en",
     fallbackLng: "en",
     supportedLngs: languages.map((l) => l.code),
     // maps e.g. "de-DE", "en-US" → "de", "en"

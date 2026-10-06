@@ -34,9 +34,9 @@ const strings = (de: boolean) =>
         guests: "Personen",
         total: "Gesamt",
         payAtRestaurant: "Bezahlt wird im Restaurant.",
-        checkInTitle: "Fast da?",
-        checkInBody: "Tippe, wenn du etwa 10 Minuten entfernt bist. Dann fangen wir an zu kochen, damit dein Essen fertig ist, wenn du ankommst.",
-        checkIn: "Ich bin in 10 Minuten da",
+        checkInTitle: "Du kommst?",
+        checkInBody: "Wir kochen so, dass alles zu deiner Zeit fertig ist. Tippe, sobald du dich auf den Weg machst, damit die Küche weiß, dass du kommst.",
+        checkIn: "Ich bin unterwegs",
         checkedIn: "Super, die Küche weiß Bescheid. Bis gleich!",
         cancelPolicy: "Du musst absagen? Ruf uns bitte spätestens 2 Stunden vorher an: +49 176 24404981. Danach können wir bereits Gekochtes nicht erstatten.",
         home: "Zur Startseite",
@@ -55,9 +55,9 @@ const strings = (de: boolean) =>
         guests: "Guests",
         total: "Total",
         payAtRestaurant: "You pay at the restaurant.",
-        checkInTitle: "Nearly here?",
-        checkInBody: "Tap when you are about 10 minutes away. We start cooking then, so your food is ready when you arrive.",
-        checkIn: "I'm 10 minutes away",
+        checkInTitle: "Still coming?",
+        checkInBody: "We cook so everything is ready at your time. Tap when you set off so the kitchen knows you are on your way.",
+        checkIn: "I'm on my way",
         checkedIn: "Great, the kitchen knows. See you soon!",
         cancelPolicy: "Need to cancel? Please call us at least 2 hours before: +49 176 24404981. After that we cannot refund food that is already cooked.",
         home: "Back to home",
@@ -110,9 +110,13 @@ export default function OrderPage() {
   const checkIn = async () => {
     setBusy(true);
     setErr("");
-    const { error } = await supabase.rpc("guest_check_in", { _slug: DISHDATA_SLUG, _order_id: orderId });
+    const { data, error } = await supabase.rpc("guest_check_in", { _slug: DISHDATA_SLUG, _order_id: orderId });
     setBusy(false);
     if (error) return setErr(error.message);
+    // Tell the kitchen by email, once (the first tap only).
+    if ((data as { first?: boolean } | null)?.first) {
+      fetch("/api/notify-checkin", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ orderId }) }).catch(() => null);
+    }
     load();
   };
 

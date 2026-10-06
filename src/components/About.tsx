@@ -65,9 +65,9 @@ const About = () => {
       <Motif name="palm-tree" className="absolute top-8 right-12 w-28 text-lime pointer-events-none" />
       <StampField variant="about" />
 
-      <div className="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-14 lg:gap-24 lg:items-stretch">
+      <div className="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-8 lg:gap-24 lg:items-stretch">
         {/* Cut-out plates, as tall as the text beside them */}
-        <div className="relative z-20 h-[440px] sm:h-[540px] lg:h-auto lg:min-h-[760px]">
+        <div className="relative z-20 h-[380px] sm:h-[540px] lg:h-auto lg:min-h-[760px]">
           <FloatingPlates spots={PLATE_TABLE} progress={scrollYProgress} ringSizes={[380, 560]} />
         </div>
 
@@ -77,7 +77,7 @@ const About = () => {
             <span className="text-sm font-semibold uppercase tracking-[0.25em] text-chili">
               {t("about.kicker")}
             </span>
-            <h2 className="font-display font-extrabold text-5xl lg:text-5xl xl:text-6xl leading-[1] mt-4">
+            <h2 className="font-display font-extrabold text-[clamp(1.7rem,8.4vw,3rem)] sm:text-5xl lg:text-5xl xl:text-6xl leading-[1.02] mt-4">
               {t("about.title_a")} <span className="text-chili">{t("about.title_accent")}</span>
               <br />
               {t("about.title_b")}{" "}
