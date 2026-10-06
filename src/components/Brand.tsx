@@ -240,10 +240,12 @@ export const dishSymbol = (dish: {
   if (dish.type === "drink") return "cardamom";
   if (dish.type === "dessert") return "star";
   if (dish.category === "veg") return "greens";
+  // A vegetable dish that nobody tagged as vegetarian must not get an animal symbol.
+  if (/\b(veg|vegetable|vegan)\b|kurma|kuruma|korma|paneer|gobi|chickpea|kadala|salad|sambar|avial|thoran|olan|dal\b/.test(n)) return "greens";
   if (/fish|moilee|prawn|seafood|meen/.test(n)) return "fish";
   if (/chicken|65|mappas/.test(n)) return "chicken";
   if (/beef/.test(n)) return "beef";
   if (/mutton|goat|lamb/.test(n)) return "goat";
   if (/pork|pig/.test(n)) return "pig";
-  return "beef"; // generic meat fallback (e.g. Malabar Biryani)
+  return "shakers"; // neutral (spices): the name says nothing about meat (e.g. Pathiri, Kozhukatta)
 };
