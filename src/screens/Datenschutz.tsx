@@ -54,7 +54,7 @@ export default function Datenschutz() {
       <LegalSection title="5. Cookies">
         <p>
           Wir verwenden notwendige Cookies für Warenkorb, Login und Spracheinstellung sowie — nur mit Ihrer Einwilligung —
-          Analyse- und Marketing-Cookies. Mit Ihrer Einwilligung messen wir mit Google Analytics 4, wie die Website genutzt wird (aufgerufene Seiten, Klicks, abgeschlossene Bestellungen und Anfragen), um sie zu verbessern; die IP-Adresse wird dabei gekürzt. Ihre aktuelle Auswahl können Sie jederzeit anpassen:
+          Analyse- und Marketing-Cookies. Mit Ihrer Einwilligung messen wir mit Google Analytics 4, wie die Website genutzt wird (aufgerufene Seiten, Klicks, abgeschlossene Bestellungen und Anfragen), um sie zu verbessern; die IP-Adresse wird dabei gekürzt. Zusätzlich zählen wir ohne Cookies und ohne personenbezogene Daten, welche Seiten aufgerufen werden und wie viele Bestellungen und Anfragen eingehen (keine IP-Adresse, keine Wiedererkennung von Personen, Auswertung nur in Summe; Grundlage ist unser berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO). Sendet Ihr Browser „Do Not Track“, zählen wir nicht. Ihre aktuelle Auswahl können Sie jederzeit anpassen:
         </p>
         <button onClick={openSettings} className="text-lime underline underline-offset-2 hover:text-chili transition-colors">
           Cookie-Einstellungen öffnen
