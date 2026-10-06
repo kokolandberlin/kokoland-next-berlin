@@ -690,7 +690,7 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
             </>}
           </div>
 
-          <div className="sticky top-[68px] z-30 border-y border-lime/15 bg-forest/95 backdrop-blur-md">
+          <div className="border-y border-lime/15 bg-forest">
             <div className="mx-auto max-w-7xl space-y-3 px-5 py-3">
               <div className="flex flex-wrap items-center gap-3">
                 <label className="relative min-w-[200px] flex-1">
@@ -720,9 +720,14 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
                   {t.streetOn} <X className="h-4 w-4" />
                 </button>
               )}
-              <div className="flex items-center gap-2">
+            </div>
+          </div>
+
+          {/* The category line: one full-width row that stays at the top while you scroll the menu. */}
+          <div className="sticky top-[68px] z-30 border-b border-lime/15 bg-forest/95 backdrop-blur-md">
+            <div className="mx-auto flex max-w-7xl items-center gap-2 px-5 py-2.5">
               <CategoryButton onClick={() => setCatsOpen(true)} />
-              <nav ref={chipBar} aria-label="Categories" className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+              <nav ref={chipBar} aria-label="Categories" className="flex min-w-0 flex-1 gap-2 overflow-x-auto [scrollbar-width:none]">
                 {groups.map((g) => (
                   <a key={g.key} href={`#cat-${slug(g.key)}`} data-active={activeCat === g.key} className="relative flex shrink-0 items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold">
                     {activeCat === g.key && <motion.span layoutId="cat-pill" className="absolute inset-0 rounded-full" style={{ background: themes[g.key]?.bg }} transition={{ type: "spring", stiffness: 400, damping: 32 }} />}
@@ -731,7 +736,6 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
                   </a>
                 ))}
               </nav>
-              </div>
             </div>
             <CategorySheet
               open={catsOpen}
@@ -758,12 +762,12 @@ const MenuPage = ({ menu }: { menu: MenuData }) => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-60px" }}
                     transition={{ duration: 0.6, ease: [0.21, 0.7, 0.25, 1] }}
-                    className="relative mb-6 flex items-center gap-4 overflow-hidden rounded-3xl px-5 py-4 sm:px-7 sm:py-5"
+                    className="sticky top-[125px] z-20 mb-6 flex items-center gap-3 overflow-hidden rounded-2xl px-4 py-2.5 shadow-lg sm:gap-4 sm:rounded-3xl sm:px-7 sm:py-4"
                     style={{ background: th.bg, color: th.fg }}
                   >
                     <Symbol name={th.symbol} className="absolute -right-4 -top-6 h-36 w-36 rotate-12 opacity-20" />
-                    <Symbol name={th.symbol} className="relative h-11 w-11 shrink-0 sm:h-14 sm:w-14" />
-                    <h3 className="relative font-display text-2xl font-extrabold leading-tight sm:text-4xl">{g.label}</h3>
+                    <Symbol name={th.symbol} className="relative h-8 w-8 shrink-0 sm:h-12 sm:w-12" />
+                    <h3 className="relative font-display text-xl font-extrabold leading-tight sm:text-3xl">{g.label}</h3>
                     <span className="relative ml-auto rounded-full px-3 py-1 text-sm font-bold" style={{ background: th.fg, color: th.bg }}>{g.dishes.length}</span>
                   </motion.div>
                   <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
