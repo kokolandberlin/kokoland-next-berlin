@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
+import { track } from "@/lib/track";
 const logo = "/assets/brand/kokoland-logo-wide.png";
 
 const strings = (de: boolean) =>
@@ -84,6 +85,7 @@ const Auth = () => {
     if (err) ({ error: err } = await supabase.auth.verifyOtp({ email, token, type: "magiclink" }));
     setLoading(false);
     if (err) return setError(x.badCode);
+    track("login", { method: "email_code" });
     router.replace(redirect);
   };
 

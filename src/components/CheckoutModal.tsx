@@ -13,6 +13,7 @@ import { formatEur } from "@/data/menu";
 import { DELIVERY_LIVE, DELIVERY_PARTNERS } from "@/lib/site";
 import { usePaymentsEnabled } from "@/hooks/usePaymentsEnabled";
 import { useMyAccount } from "@/hooks/useMyAccount";
+import { track } from "@/lib/track";
 
 // Timed takeaway and dine-in orders above this amount are paid online (the server enforces the same limit).
 const PREPAY_OVER = 25;
@@ -180,6 +181,11 @@ const CheckoutModal = ({ open, onClose, onSuccess }: Props) => {
     setErr("");
   };
 
+  useEffect(() => {
+    if (open) track("begin_checkout", { currency: "EUR", value: total, items: items.map((i) => ({ item_id: i.id, item_name: i.name, price: i.price, quantity: i.qty })) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const handleClose = () => {
     reset();
     onClose();
@@ -296,6 +302,11 @@ const CheckoutModal = ({ open, onClose, onSuccess }: Props) => {
     setOrderNumber(result.order_number ?? "KOK-???");
     setOrderId(result.order_id);
     setConfirmedTotal(result.total);
+
+    const trackItems = items.map((i) => ({ item_id: i.id, item_name: i.name, price: i.price, quantity: i.qty }));
+    const kind = atTable ? "table" : orderType;
+    if (payOnline) track("begin_payment", { currency: "EUR", value: result.total, transaction_id: result.order_number, order_type: kind, items: trackItems });
+    else track("purchase", { currency: "EUR", value: result.total, transaction_id: result.order_number, order_type: kind, scheduled: timed, pay_at_restaurant: true, items: trackItems });
 
     if (payOnline) {
       // The order waits as unpaid until Stripe confirms; send the guest to pay now.
@@ -449,6 +460,7 @@ const CheckoutModal = ({ open, onClose, onSuccess }: Props) => {
                               href={p.href}
                               target="_blank"
                               rel="noopener noreferrer"
+                              onClick={() => track("click_delivery_partner", { partner: p.name })}
                               className="inline-flex items-center gap-1.5 rounded-full border-2 border-lime px-4 py-1.5 text-sm font-semibold text-lime transition-colors hover:bg-lime hover:text-forest"
                             >
                               {p.name} ↗

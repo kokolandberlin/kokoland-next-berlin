@@ -43,6 +43,7 @@ export default function Datenschutz() {
           <li>Vercel Inc. — Auslieferung der Website</li>
           <li>Stripe — Zahlungsabwicklung bei Online-Zahlung (Karte, Apple Pay, Google Pay)</li>
           <li>Resend — Versand von E-Mails (Bestellbestätigungen, Anmeldecodes)</li>
+          <li>Google Ireland Limited — Reichweitenmessung mit Google Analytics 4, nur mit Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO)</li>
           <li>SumUp — Kartenzahlung im Restaurant</li>
         </ul>
         <p className="text-cream/65 text-xs">
@@ -53,7 +54,7 @@ export default function Datenschutz() {
       <LegalSection title="5. Cookies">
         <p>
           Wir verwenden notwendige Cookies für Warenkorb, Login und Spracheinstellung sowie — nur mit Ihrer Einwilligung —
-          Analyse- und Marketing-Cookies. Ihre aktuelle Auswahl können Sie jederzeit anpassen:
+          Analyse- und Marketing-Cookies. Mit Ihrer Einwilligung messen wir mit Google Analytics 4, wie die Website genutzt wird (aufgerufene Seiten, Klicks, abgeschlossene Bestellungen und Anfragen), um sie zu verbessern; die IP-Adresse wird dabei gekürzt. Ihre aktuelle Auswahl können Sie jederzeit anpassen:
         </p>
         <button onClick={openSettings} className="text-lime underline underline-offset-2 hover:text-chili transition-colors">
           Cookie-Einstellungen öffnen

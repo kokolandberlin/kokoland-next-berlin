@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle2, Loader2, Footprints, CreditCard } from "lucide-react";
 import { supabasePublic as supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
 import { formatEur } from "@/data/menu";
+import { track } from "@/lib/track";
 
 interface OrderCard {
   order_number: string;
@@ -93,6 +94,18 @@ export default function OrderPage() {
     const t = setInterval(load, 3000);
     return () => clearInterval(t);
   }, [order?.payment_state, load]);
+
+  // Back from Stripe: the order is paid, count it once.
+  useEffect(() => {
+    if (!order || order.payment_state !== "paid" || !search.get("paid")) return;
+    try {
+      if (sessionStorage.getItem(`tracked-${order.order_number}`)) return;
+      sessionStorage.setItem(`tracked-${order.order_number}`, "1");
+    } catch {
+      /* no storage: allow a possible duplicate rather than lose the sale */
+    }
+    track("purchase", { currency: "EUR", value: order.total, transaction_id: order.order_number, order_type: order.order_type, paid_online: true });
+  }, [order, search]);
 
   const pay = async () => {
     setBusy(true);

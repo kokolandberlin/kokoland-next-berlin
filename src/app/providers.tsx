@@ -9,6 +9,7 @@ import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import CustomCursor from "@/components/CustomCursor";
 import CookieBanner from "@/components/CookieBanner";
 import TableBanner from "@/components/TableBanner";
+import Analytics from "@/components/Analytics";
 
 /** After the first render, move to the visitor's saved or browser language. */
 function LanguageSync() {
@@ -32,6 +33,7 @@ export default function Providers({ children }: { children: ReactNode }) {
             <CustomCursor />
             {children}
             <TableBanner />
+            <Analytics />
             <CookieBanner />
           </CookieConsentProvider>
         </CartProvider>

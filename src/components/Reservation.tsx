@@ -11,6 +11,7 @@ import FloatingPlates, { type PlateSpot } from "./FloatingPlates";
 import { plates } from "@/data/food-photos";
 import { supabasePublic as supabase, DISHDATA_SLUG } from "@/lib/supabase";
 import { berlinToISO } from "@/lib/berlin-time";
+import { track } from "@/lib/track";
 
 // Plates around the headline; they drift and turn as the section scrolls by.
 // Phones: three plates in a band above the headline and three below the text, so none sit on the words.
@@ -89,6 +90,7 @@ const Reservation = () => {
       return;
     }
     setSent(true);
+    track("generate_lead", { lead_type: "reservation", party_size: partySize, occasion: occasion || undefined });
     setTimeout(() => {
       setSent(false);
       setForm({ name: "", phone: "", email: "", date: "", time: "" });

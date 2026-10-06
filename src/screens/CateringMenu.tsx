@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFollowActiveChip } from "@/hooks/useFollowActiveChip";
+import { track } from "@/lib/track";
 import CategorySheet, { CategoryButton } from "@/components/CategorySheet";
 import { isCutout } from "@/components/DishVisual";
 import { photoForDish, looseDishPhoto } from "@/data/food-photos";
@@ -521,6 +522,7 @@ const RequestModal = ({
       return;
     }
     setState("sent");
+    track("generate_lead", { lead_type: "catering_inquiry", currency: "EUR", value: total, guests: form.guests || undefined });
     onSent();
     setForm({ name: "", phone: "", email: "", date: "", guests: "", type: "", notes: "" });
   };

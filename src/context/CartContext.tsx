@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { track } from "@/lib/track";
 
 export type CartItem = {
   id: string;
@@ -49,7 +50,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const addItem = (id: string, name: string, price: number) =>
+  const addItem = (id: string, name: string, price: number) => {
+    track("add_to_cart", { currency: "EUR", value: price, items: [{ item_id: id, item_name: name, price, quantity: 1 }] });
     setItems((prev) => {
       const existing = prev.find((i) => i.name === name);
       if (existing) {
@@ -57,6 +59,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { id, name, price, qty: 1 }];
     });
+  };
 
   const removeItem = (name: string) =>
     setItems((prev) => prev.filter((i) => i.name !== name));

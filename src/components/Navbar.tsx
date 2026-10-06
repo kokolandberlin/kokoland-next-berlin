@@ -55,7 +55,17 @@ const Navbar = () => {
                 : "bg-transparent py-2"
             }`}
           >
-            <Link href="/#top" className="flex items-center gap-2">
+            <Link
+              href="/"
+              onClick={(e) => {
+                // Already on the home page: glide to the top instead of leaving "#top" in the address.
+                if (window.location.pathname === "/") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="flex items-center gap-2"
+            >
               {/* Phones: elephant mark only, so the header icons keep their room. */}
               <img
                 src={logoMark}
