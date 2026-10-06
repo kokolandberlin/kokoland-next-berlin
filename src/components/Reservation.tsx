@@ -13,6 +13,16 @@ import { supabasePublic as supabase, DISHDATA_SLUG } from "@/lib/supabase";
 import { berlinToISO } from "@/lib/berlin-time";
 
 // Plates around the headline; they drift and turn as the section scrolls by.
+// Phones: three plates in a band above the headline and three below the text, so none sit on the words.
+const PLATE_SPOTS_PHONE: PlateSpot[] = [
+  { photo: plates.porottaBeef, left: "-3%", top: "-3%", vw: 25, min: 84, max: 130, drift: 12, spin: 55, tilt: -8 },
+  { photo: plates.coconutPudding, left: "50%", top: "-1%", vw: 17, min: 58, max: 90, drift: 14, spin: -60, tilt: 0, centerX: true },
+  { photo: plates.paneerChilli, left: "76%", top: "-3%", vw: 24, min: 80, max: 120, drift: 12, spin: -50, tilt: 0 },
+  { photo: plates.samosa, left: "-2%", top: "89%", vw: 27, min: 88, max: 135, drift: 12, spin: 50, tilt: 10 },
+  { photo: plates.kappaBiryani, left: "50%", top: "91%", vw: 21, min: 70, max: 105, drift: 10, spin: 45, tilt: 0, centerX: true },
+  { photo: plates.beefDry, left: "74%", top: "89%", vw: 26, min: 84, max: 130, drift: 12, spin: -45, tilt: -6 },
+];
+
 const PLATE_SPOTS: PlateSpot[] = [
   { photo: plates.porottaBeef, left: "-3%", top: "-6%", vw: 17, max: 250, drift: 70, spin: 38, tilt: -12 },
   { photo: plates.kappaBiryani, left: "81%", top: "-8%", vw: 18, max: 270, drift: 90, spin: -42, tilt: 10 },
@@ -88,12 +98,17 @@ const Reservation = () => {
   };
 
   return (
-    <motion.section ref={sectionRef} id="reservation" style={{ backgroundColor: bg }} className="relative bg-cream text-forest py-28 overflow-hidden">
-      <Motif name="palm-fronds" className="absolute top-12 right-10 w-28 text-lime pointer-events-none" />
+    <motion.section ref={sectionRef} id="reservation" style={{ backgroundColor: bg }} className="relative bg-cream text-forest py-14 md:py-28 overflow-hidden">
+      <Motif name="palm-fronds" className="absolute top-12 right-10 hidden w-28 text-lime pointer-events-none md:block" />
 
       <div className="max-w-7xl mx-auto px-5 relative z-10">
-        <div className="relative mb-14 py-16 md:py-24">
-          <FloatingPlates spots={PLATE_SPOTS} progress={scrollYProgress} />
+        <div className="relative mb-10 pb-40 pt-28 md:mb-14 md:py-24">
+          <div className="absolute inset-0 md:hidden">
+            <FloatingPlates spots={PLATE_SPOTS_PHONE} progress={scrollYProgress} rings={false} />
+          </div>
+          <div className="absolute inset-0 hidden md:block">
+            <FloatingPlates spots={PLATE_SPOTS} progress={scrollYProgress} />
+          </div>
         <Reveal>
           <div className="relative text-center max-w-3xl mx-auto">
             <span className="inline-block bg-lime text-forest text-xs font-semibold uppercase tracking-widest rounded-full px-4 py-1.5">
