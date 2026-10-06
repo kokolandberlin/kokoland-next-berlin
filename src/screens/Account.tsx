@@ -4,7 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Gift, Loader2, RotateCcw, Download, Trash2, CalendarClock } from "lucide-react";
+import { Gift, Loader2, RotateCcw, Download, Trash2, CalendarClock, Percent, Euro, Ticket, LogOut, Receipt } from "lucide-react";
+import { motion } from "framer-motion";
+import Reveal from "@/components/Reveal";
+import { plates } from "@/data/food-photos";
+import { DELIVERY_LIVE } from "@/lib/site";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useMyAccount, type MyOrder } from "@/hooks/useMyAccount";
@@ -15,6 +19,14 @@ const strings = (de: boolean) =>
   de
     ? {
         back: "← Zur Startseite",
+        hi: (n: string) => `Hallo, ${n}`,
+        member: "kokoland Mitglied",
+        visits: "Besuche",
+        spent: "Ausgegeben",
+        vouchersN: "Gutscheine",
+        pointsToGo: (n: number) => `Noch ${n} Punkte`,
+        ready: "Einlösbar",
+        yourPoints: "Deine Punkte",
         title: "Mein Konto",
         signOut: "Abmelden",
         tier: "Stufe",
@@ -51,6 +63,14 @@ const strings = (de: boolean) =>
       }
     : {
         back: "← Back to home",
+        hi: (n: string) => `Hi, ${n}`,
+        member: "kokoland member",
+        visits: "Visits",
+        spent: "Spent",
+        vouchersN: "Vouchers",
+        pointsToGo: (n: number) => `${n} points to go`,
+        ready: "Ready to redeem",
+        yourPoints: "Your points",
         title: "My account",
         signOut: "Sign out",
         tier: "Tier",
@@ -202,130 +222,186 @@ const Account = () => {
     router.replace("/");
   };
 
-  return (
-    <div className="min-h-screen bg-forest text-cream">
-      <div className="max-w-2xl mx-auto px-5 py-12 space-y-8">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-cream/60 hover:text-lime transition-colors">{x.back}</Link>
+  const first = c.name.trim().split(/\s+/)[0] || c.name;
+  // Free delivery and free-item rewards are not applied by the order system yet: do not offer them.
+  const redeemable = account.rewards.filter((r) => r.reward_type !== "free_item" && (r.reward_type !== "free_delivery" || DELIVERY_LIVE));
+  const sortedRewards = [...redeemable].sort((a, b) => Number(c.points >= b.cost_points) - Number(c.points >= a.cost_points) || a.cost_points - b.cost_points);
+  const tierColor = currentTier?.color ?? "#C0F252";
+  const rewardIcon = (t: string) => (t === "percent_discount" ? Percent : t === "amount_discount" ? Euro : Gift);
 
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-lime mb-1">{x.title}</p>
-            <h1 className="font-display font-extrabold text-4xl">{c.name}</h1>
-            <p className="text-sm text-cream/55">{c.email}</p>
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-forest to-[#0B2F27] text-cream">
+      <div className="mx-auto max-w-3xl space-y-10 px-5 py-8 sm:py-12">
+        {/* Top bar */}
+        <div className="flex items-center justify-between">
+          <Link href="/" aria-label="kokoland">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/brand/kokoland-logo-wide.png" alt="kokoland" className="h-8 object-contain" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/menu" className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-forest transition-colors hover:bg-cream">{de ? "Bestellen" : "Order"}</Link>
+            <button onClick={() => signOut().then(() => router.replace("/"))} aria-label={x.signOut} className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-cream/20 transition-colors hover:border-lime hover:text-lime"><LogOut className="h-4 w-4" /></button>
           </div>
-          <button onClick={() => signOut().then(() => router.replace("/"))} className="shrink-0 rounded-full border-2 border-cream/20 px-4 py-2 text-sm font-medium hover:border-lime hover:text-lime">{x.signOut}</button>
         </div>
+
+        {/* Greeting */}
+        <Reveal>
+          <div className="flex items-center gap-4">
+            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-lime font-display text-3xl font-extrabold text-forest">{first.charAt(0).toUpperCase()}</span>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lime">{x.member}</p>
+              <h1 className="truncate font-display text-3xl font-extrabold leading-tight sm:text-4xl">{x.hi(first)}</h1>
+              <p className="truncate text-sm text-cream/55">{c.email}</p>
+            </div>
+          </div>
+        </Reveal>
 
         {msg && <p role="status" className="rounded-xl bg-lime/10 px-4 py-3 text-sm text-lime">{msg}</p>}
 
         {account.program?.enabled !== false && (
           <>
-            <div className="rounded-3xl border-2 border-lime/30 p-7 space-y-4 soft-shadow">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-cream/65 text-sm">{x.tier}</p>
-                  <p className="font-display font-extrabold text-3xl text-lime">{c.tier}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-cream/65 text-sm">{account.program?.points_name ?? x.points}</p>
-                  <p className="font-display font-extrabold text-3xl text-lime">{c.points.toLocaleString()}</p>
+            {/* Membership card */}
+            <Reveal delay={0.05}>
+              <div className="relative overflow-hidden rounded-[2rem] border-2 border-lime/30 bg-gradient-to-br from-[#134033] via-[#0F4A3A] to-[#02664C] p-6 sm:p-8 soft-shadow">
+                <motion.img
+                  src={plates.kappaFish.src}
+                  alt=""
+                  aria-hidden
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                  className="pointer-events-none absolute -right-12 -top-12 w-44 opacity-90 drop-shadow-[0_14px_16px_rgba(0,0,0,0.35)] sm:w-56"
+                />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-sm font-bold text-forest" style={{ background: tierColor }}>
+                    <span className="h-2 w-2 rounded-full bg-forest/70" /> {c.tier}
+                  </span>
+                  <p className="mt-6 text-sm text-cream/65">{x.yourPoints}</p>
+                  <p className="font-display text-6xl font-extrabold leading-none text-lime sm:text-7xl">{c.points.toLocaleString()}</p>
+                  <div className="mt-6 max-w-sm">
+                    <div className="h-2.5 overflow-hidden rounded-full bg-cream/15">
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.9, ease: "easeOut" }} className="h-full rounded-full bg-lime" />
+                    </div>
+                    <p className="mt-2 text-xs text-cream/70">{nextTier ? x.toNext(Math.max(0, Math.ceil(nextTier.threshold - metric)), nextTier.name) : x.topTier}</p>
+                  </div>
+                  <div className="mt-6 grid grid-cols-3 gap-3 border-t border-cream/10 pt-5 text-center">
+                    {[
+                      { v: String(c.visits), l: x.visits },
+                      { v: formatEur(c.total_spend), l: x.spent },
+                      { v: String(account.vouchers.length), l: x.vouchersN },
+                    ].map((t) => (
+                      <div key={t.l}>
+                        <p className="font-display text-xl font-extrabold">{t.v}</p>
+                        <p className="text-[11px] uppercase tracking-widest text-cream/55">{t.l}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="space-y-2">
-                <div className="w-full h-2 rounded-full bg-cream/10 overflow-hidden"><div className="h-full rounded-full bg-lime transition-all" style={{ width: `${pct}%` }} /></div>
-                <p className="text-xs text-cream/65">{nextTier ? x.toNext(Math.max(0, Math.ceil(nextTier.threshold - metric)), nextTier.name) : x.topTier}</p>
-              </div>
-            </div>
+            </Reveal>
 
             {code && (
               <div className="rounded-2xl border border-lime/40 bg-lime/15 px-5 py-4 text-sm">
                 <p className="text-lime">{x.voucherNote}</p>
-                <p className="mt-1 font-mono text-xl font-bold text-lime">{code}</p>
+                <p className="mt-1 font-mono text-2xl font-bold tracking-widest text-lime">{code}</p>
               </div>
             )}
 
-            {account.rewards.length > 0 && (
-              <section className="space-y-3">
-                <h2 className="font-display font-bold text-xl flex items-center gap-2"><Gift className="w-5 h-5 text-lime" /> {x.rewards}</h2>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {account.rewards.map((r) => {
+            {/* Rewards */}
+            {sortedRewards.length > 0 && (
+              <section className="space-y-4">
+                <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold"><Gift className="h-5 w-5 text-lime" /> {x.rewards}</h2>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {sortedRewards.map((r, i) => {
                     const locked = r.min_tier_id ? tierOrderOf(r.min_tier_id) > myTierOrder : false;
-                    const poor = c.points < r.cost_points;
+                    const can = c.points >= r.cost_points && !locked;
+                    const Icon = rewardIcon(r.reward_type);
                     return (
-                      <div key={r.id} className={`rounded-2xl border-2 p-5 flex flex-col gap-2 ${poor || locked ? "border-cream/10 opacity-70" : "border-lime/40"}`}>
-                        <p className="font-display font-bold">{r.label}</p>
-                        {r.description && <p className="text-sm text-cream/60">{r.description}</p>}
-                        <p className="text-sm text-lime font-semibold">{r.cost_points} {x.points}</p>
-                        <button
-                          disabled={poor || locked || busy === r.id}
-                          onClick={() => redeem(r.id)}
-                          className="mt-1 rounded-full bg-lime px-4 py-2 text-sm font-semibold text-forest transition-colors hover:bg-chili hover:text-cream disabled:cursor-not-allowed disabled:bg-cream/10 disabled:text-cream/50"
-                        >
-                          {locked ? x.tierLocked : poor ? x.needMore : x.redeem}
-                        </button>
-                      </div>
+                      <Reveal key={r.id} delay={i * 0.05}>
+                        <div className={`flex h-full flex-col gap-3 rounded-3xl border-2 p-5 transition-colors ${can ? "border-lime/60 bg-lime/10" : "border-cream/10 bg-cream/[0.03]"}`}>
+                          <div className="flex items-start justify-between gap-3">
+                            <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${can ? "bg-lime text-forest" : "bg-cream/10 text-cream/60"}`}><Icon className="h-5 w-5" /></span>
+                            <span className="rounded-full bg-forest/60 px-3 py-1 text-xs font-bold text-lime">{r.cost_points} {x.points}</span>
+                          </div>
+                          <div>
+                            <p className="font-display text-xl font-extrabold">{r.label}</p>
+                            {r.description && <p className="mt-0.5 text-sm text-cream/60">{r.description}</p>}
+                          </div>
+                          {!can && !locked && (
+                            <div>
+                              <div className="h-1.5 overflow-hidden rounded-full bg-cream/10"><div className="h-full rounded-full bg-lime/70" style={{ width: `${Math.min(100, Math.round((c.points / r.cost_points) * 100))}%` }} /></div>
+                              <p className="mt-1.5 text-xs text-cream/55">{x.pointsToGo(r.cost_points - c.points)}</p>
+                            </div>
+                          )}
+                          <button
+                            disabled={!can || busy === r.id}
+                            onClick={() => redeem(r.id)}
+                            className="mt-auto rounded-full bg-lime px-4 py-2.5 text-sm font-bold text-forest transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:bg-cream/10 disabled:text-cream/40"
+                          >
+                            {locked ? x.tierLocked : can ? x.redeem : x.needMore}
+                          </button>
+                        </div>
+                      </Reveal>
                     );
                   })}
                 </div>
               </section>
             )}
 
+            {/* Vouchers */}
             {account.vouchers.length > 0 && (
               <section className="space-y-3">
-                <h2 className="font-display font-bold text-xl">{x.vouchers}</h2>
+                <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold"><Ticket className="h-5 w-5 text-lime" /> {x.vouchers}</h2>
                 <ul className="space-y-2">
                   {account.vouchers.map((v) => (
-                    <li key={v.code} className="flex items-center justify-between rounded-2xl border border-cream/15 px-5 py-3 text-sm">
-                      <span><span className="font-semibold">{v.label}</span>{v.expires_at ? <span className="text-cream/50"> · {x.validUntil} {fmt(v.expires_at)}</span> : null}</span>
-                      <span className="font-mono font-bold text-lime">{v.code}</span>
+                    <li key={v.code} className="flex items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-lime/40 bg-lime/5 px-5 py-4">
+                      <span className="min-w-0">
+                        <span className="block font-semibold">{v.label}</span>
+                        {v.expires_at && <span className="text-xs text-cream/55">{x.validUntil} {fmt(v.expires_at)}</span>}
+                      </span>
+                      <span className="shrink-0 rounded-lg bg-forest px-3 py-1.5 font-mono text-lg font-bold tracking-widest text-lime">{v.code}</span>
                     </li>
                   ))}
                 </ul>
-              </section>
-            )}
-
-            {account.earn_rules.length > 0 && (
-              <section className="space-y-3">
-                <h2 className="font-display font-bold text-xl">{x.earn}</h2>
-                <ul className="space-y-1.5 text-sm">
-                  {account.earn_rules.map((e) => (
-                    <li key={e.action_type} className="flex justify-between border-b border-cream/10 py-1.5"><span className="text-cream/75">{e.label}</span><span className="font-semibold text-lime">+{e.points}</span></li>
-                  ))}
-                </ul>
+                <p className="text-xs text-cream/50">{x.voucherNote}</p>
               </section>
             )}
           </>
         )}
 
+        {/* Upcoming */}
         {upcoming.length > 0 && (
           <section className="space-y-3">
-            <h2 className="font-display font-bold text-xl flex items-center gap-2"><CalendarClock className="w-5 h-5 text-lime" /> {x.upcoming}</h2>
+            <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold"><CalendarClock className="h-5 w-5 text-lime" /> {x.upcoming}</h2>
             {upcoming.map((o) => (
-              <Link key={o.id} href={`/order/${o.id}`} className="flex items-center justify-between rounded-2xl border-2 border-lime/30 px-5 py-4 transition-colors hover:border-lime">
+              <Link key={o.id} href={`/order/${o.id}`} className="flex items-center justify-between rounded-2xl border-2 border-lime/30 bg-lime/5 px-5 py-4 transition-colors hover:border-lime">
                 <span>
                   <span className="block font-semibold">{fmt(o.scheduled_for!, true)}</span>
                   <span className="text-sm text-cream/60">{o.order_number}{o.party_size ? ` · ${o.party_size} ${x.guests}` : ""}</span>
                 </span>
-                <span className="font-display font-bold text-lime">{formatEur(o.total)}</span>
+                <span className="font-display text-lg font-bold text-lime">{formatEur(o.total)}</span>
               </Link>
             ))}
           </section>
         )}
 
+        {/* Orders */}
         <section className="space-y-3">
-          <h2 className="font-display font-bold text-xl">{x.history}</h2>
+          <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold"><Receipt className="h-5 w-5 text-lime" /> {x.history}</h2>
           {account.orders.length === 0 ? (
-            <p className="text-sm text-cream/60">{x.none}</p>
+            <div className="rounded-3xl border-2 border-dashed border-cream/15 px-6 py-10 text-center">
+              <p className="text-cream/60">{x.none}</p>
+              <Link href="/menu" className="mt-4 inline-block rounded-full bg-lime px-6 py-2.5 text-sm font-semibold text-forest transition-colors hover:bg-cream">{de ? "Zur Speisekarte" : "See the menu"}</Link>
+            </div>
           ) : (
             <ul className="space-y-3">
               {account.orders.map((o) => (
-                <li key={o.id} className="rounded-2xl border border-cream/15 p-4">
+                <li key={o.id} className="rounded-3xl border border-cream/12 bg-cream/[0.03] p-5">
                   <div className="flex items-center justify-between gap-3 text-sm">
-                    <span className="font-mono text-cream/60">{o.order_number} · {fmt(o.created_at)}</span>
-                    <span className="font-display font-bold text-lime">{formatEur(o.total)}</span>
+                    <span className="text-cream/55">{o.order_number} · {fmt(o.created_at)}</span>
+                    <span className="font-display text-lg font-extrabold text-lime">{formatEur(o.total)}</span>
                   </div>
-                  <p className="mt-1.5 text-sm text-cream/80">{o.items.map((l) => `${l.qty}× ${l.name}`).join(", ")}</p>
-                  <button onClick={() => reorder(o)} disabled={busy === o.id} className="mt-3 inline-flex items-center gap-1.5 rounded-full border-2 border-lime px-4 py-1.5 text-sm font-semibold text-lime transition-colors hover:bg-lime hover:text-forest disabled:opacity-50">
+                  <p className="mt-2 text-[15px] leading-relaxed">{o.items.map((l) => `${l.qty}× ${l.name}`).join(", ")}</p>
+                  <button onClick={() => reorder(o)} disabled={busy === o.id} className="mt-4 inline-flex items-center gap-1.5 rounded-full border-2 border-lime px-4 py-1.5 text-sm font-semibold text-lime transition-colors hover:bg-lime hover:text-forest disabled:opacity-50">
                     <RotateCcw className="h-3.5 w-3.5" /> {x.reorder}
                   </button>
                 </li>
@@ -334,9 +410,25 @@ const Account = () => {
           )}
         </section>
 
+        {/* How to earn */}
+        {account.program?.enabled !== false && account.earn_rules.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="font-display text-2xl font-extrabold">{x.earn}</h2>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {account.earn_rules.map((e) => (
+                <div key={e.action_type} className="flex items-center justify-between rounded-2xl bg-cream/[0.04] px-4 py-3 text-sm">
+                  <span className="text-cream/80">{e.label}</span>
+                  <span className="rounded-full bg-lime/15 px-2.5 py-0.5 font-bold text-lime">+{e.points}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Profile */}
         {form && (
-          <section className="space-y-4">
-            <h2 className="font-display font-bold text-xl">{x.profile}</h2>
+          <section className="space-y-4 rounded-3xl border border-cream/12 bg-cream/[0.03] p-6">
+            <h2 className="font-display text-2xl font-extrabold">{x.profile}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label={x.name} value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
               <Field label={x.phone} type="tel" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
@@ -346,15 +438,16 @@ const Account = () => {
               <input type="checkbox" checked={form.newsletter} onChange={(e) => setForm({ ...form, newsletter: e.target.checked })} className="h-4 w-4 accent-[#C0F252]" />
               {x.newsletter}
             </label>
-            <button onClick={saveProfile} disabled={busy === "profile" || !form.name.trim()} className="rounded-full bg-lime px-8 py-3 font-semibold text-forest transition-colors hover:bg-chili hover:text-cream disabled:opacity-50">{x.save}</button>
+            <button onClick={saveProfile} disabled={busy === "profile" || !form.name.trim()} className="rounded-full bg-lime px-8 py-3 font-semibold text-forest transition-colors hover:bg-cream disabled:opacity-50">{x.save}</button>
           </section>
         )}
 
-        <section className="space-y-3 border-t border-cream/10 pt-6">
-          <h2 className="font-display font-bold text-xl">{x.privacy}</h2>
-          <div className="flex flex-wrap gap-3">
-            <button onClick={exportData} disabled={busy === "export"} className="inline-flex items-center gap-2 rounded-full border-2 border-cream/20 px-5 py-2.5 text-sm font-medium hover:border-lime hover:text-lime"><Download className="h-4 w-4" /> {x.exportData}</button>
-            <button onClick={deleteAccount} disabled={busy === "delete"} className="inline-flex items-center gap-2 rounded-full border-2 border-chili/50 px-5 py-2.5 text-sm font-medium text-chili-text hover:bg-chili/10"><Trash2 className="h-4 w-4" /> {x.deleteAccount}</button>
+        {/* Privacy */}
+        <section className="flex flex-wrap items-center justify-between gap-3 border-t border-cream/10 pt-6 text-sm">
+          <span className="text-cream/50">{x.privacy}</span>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={exportData} disabled={busy === "export"} className="inline-flex items-center gap-2 rounded-full border-2 border-cream/20 px-4 py-2 font-medium transition-colors hover:border-lime hover:text-lime"><Download className="h-4 w-4" /> {x.exportData}</button>
+            <button onClick={deleteAccount} disabled={busy === "delete"} className="inline-flex items-center gap-2 rounded-full border-2 border-chili/40 px-4 py-2 font-medium text-chili-text transition-colors hover:bg-chili/10"><Trash2 className="h-4 w-4" /> {x.deleteAccount}</button>
           </div>
         </section>
       </div>
