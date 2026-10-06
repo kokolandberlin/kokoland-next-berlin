@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView } from "framer-motion";
+import { motion, useScroll, useSpring, useMotionValue, useInView } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-const restaurantInterior = "/assets/restaurant-interior.svg";
-const backwaters = "/assets/backwaters.svg";
 import Reveal from "./Reveal";
 import { Motif, BadgeIcon, IconName } from "./Brand";
-import { StampField, PackagingMark } from "./BrandDecor";
-import { useTheme } from "@/context/ThemeContext";
+import { StampField } from "./BrandDecor";
+import FloatingPlates, { type PlateSpot } from "./FloatingPlates";
+import { plates } from "@/data/food-photos";
 
 const Counter = ({ to, suffix = "" }: { to: number; suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -32,65 +33,56 @@ const Counter = ({ to, suffix = "" }: { to: number; suffix?: string }) => {
 
 const values: { icon: IconName; key: string }[] = [
   { icon: "pure", key: "value1" },
-  { icon: "fresh", key: "value2" },
-  { icon: "plant", key: "value3" },
+  { icon: "plant", key: "value2" },
+  { icon: "fresh", key: "value3" },
+];
+
+// A table of plates running the full height of the text: one big plate at the
+// centre inside the rings, the rest around it, top and bottom rows mirroring each other.
+const PLATE_TABLE: PlateSpot[] = [
+  { photo: plates.kappaFish, left: "22%", top: "33%", vw: 22, min: 130, max: 300, drift: 14, spin: 40, tilt: 0 },
+  { photo: plates.porottaBeef, left: "1%", top: "11%", vw: 17, min: 104, max: 235, drift: 20, spin: 55, tilt: -8 },
+  { photo: plates.puttuKadala, left: "54%", top: "9%", vw: 16, min: 100, max: 220, drift: 22, spin: 45, tilt: 14 },
+  { photo: plates.coconutPudding, left: "35%", top: "7%", vw: 10, min: 68, max: 135, drift: 26, spin: -60, tilt: 0 },
+  { photo: plates.bananaFritters, left: "74%", top: "20%", vw: 10, min: 66, max: 135, drift: 30, spin: -70, tilt: 0, desktopOnly: true },
+  { photo: plates.kadala, left: "41%", top: "24%", vw: 8, min: 56, max: 112, drift: 24, spin: 80, tilt: 0 },
+  { photo: plates.paneerChilli, left: "-3%", top: "39%", vw: 14, min: 90, max: 195, drift: 26, spin: -65, tilt: 0 },
+  { photo: plates.kokoChicken, left: "67%", top: "40%", vw: 13, min: 84, max: 178, drift: 24, spin: 60, tilt: 0 },
+  { photo: plates.beefDry, left: "0%", top: "60%", vw: 16, min: 100, max: 225, drift: 20, spin: 50, tilt: -6 },
+  { photo: plates.chickenRoll, left: "31%", top: "65%", vw: 14, min: 90, max: 200, drift: 24, spin: -45, tilt: 8 },
+  { photo: plates.samosa, left: "60%", top: "62%", vw: 14, min: 90, max: 195, drift: 28, spin: 50, tilt: 10 },
+  { photo: plates.semiya, left: "50%", top: "80%", vw: 11, min: 72, max: 150, drift: 22, spin: 65, tilt: 0, desktopOnly: true },
+  { photo: plates.gheeRice, left: "18%", top: "83%", vw: 9, min: 60, max: 125, drift: 20, spin: -55, tilt: 0, desktopOnly: true },
 ];
 
 const About = () => {
   const { t } = useTranslation();
-  const { style } = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [-40, 50]);
 
   return (
     <section id="about" ref={ref} className="relative bg-cream text-forest py-28 overflow-hidden">
       <Motif name="palm-tree" className="absolute top-8 right-12 w-28 text-lime pointer-events-none" />
       <StampField variant="about" />
 
-      <div className="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-16 items-center">
-        {/* Images */}
-        <div className={`relative ${style === "bazaar" ? "h-[620px]" : "h-[520px]"}`}>
-          <motion.div
-            style={{ y: y1 }}
-            className="absolute top-0 left-0 w-3/4 overflow-hidden arch-top rounded-b-3xl border-4 border-forest group"
-          >
-            <img
-              src={restaurantInterior}
-              alt="kokoland interior"
-              className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-          </motion.div>
-          <motion.div
-            style={{ y: y2 }}
-            className="absolute top-[170px] right-0 w-2/3 overflow-hidden rounded-[2rem] border-4 border-lime group rotate-2 z-10"
-          >
-            <img
-              src={backwaters}
-              alt="Kerala backwaters"
-              className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-          </motion.div>
-          <div className="absolute top-[230px] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-chili text-cream font-display font-bold text-sm rounded-full px-5 py-3 rotate-[-6deg] z-20 soft-shadow">
-            {t("about.badge")}
-          </div>
-          {/* Spice-pack illustration, bottom-left under the photos (bazaar only) */}
-          <PackagingMark className="absolute bottom-0 left-0 w-[46%] animate-float pointer-events-none z-0" />
+      <div className="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-14 lg:gap-24 lg:items-stretch">
+        {/* Cut-out plates, as tall as the text beside them */}
+        <div className="relative z-20 h-[440px] sm:h-[540px] lg:h-auto lg:min-h-[760px]">
+          <FloatingPlates spots={PLATE_TABLE} progress={scrollYProgress} ringSizes={[380, 560]} />
         </div>
 
         {/* Text */}
-        <div>
+        <div className="flex flex-col justify-center">
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.25em] text-chili">
               {t("about.kicker")}
             </span>
-            <h2 className="font-display font-extrabold text-5xl lg:text-7xl leading-[0.95] mt-4">
-              {t("about.title_where")} <span className="text-chili">{t("about.title_kerala")}</span>
+            <h2 className="font-display font-extrabold text-5xl lg:text-5xl xl:text-6xl leading-[1] mt-4">
+              {t("about.title_a")} <span className="text-chili">{t("about.title_accent")}</span>
               <br />
-              {t("about.title_meets")}{" "}
+              {t("about.title_b")}{" "}
               <span className="relative inline-block">
-                {t("about.title_berlin")}
+                {t("about.title_end")}
                 <span className="absolute left-0 -bottom-1 w-full h-3 bg-lime -z-10" />
               </span>
             </h2>
@@ -98,24 +90,27 @@ const About = () => {
 
           <Reveal delay={0.15}>
             <p className="mt-8 text-lg text-forest/70 max-w-lg">{t("about.body")}</p>
+            <Link
+              href="/kerala"
+              className="group mt-6 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 font-semibold text-lime transition-colors hover:bg-chili hover:text-cream"
+            >
+              {t("about.explore")} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Reveal>
 
-          <div className="mt-10 space-y-3">
-            {values.map((v, i) => (
-              <Reveal key={v.key} delay={0.1 * i}>
-                <div
-                  className="group flex items-center gap-4 rounded-2xl border-2 border-forest/10 p-4 hover:border-lime hover:bg-forest hover:text-cream transition-all duration-300"
-                  data-cursor="hover"
+          <Reveal delay={0.2}>
+            <ul className="mt-10 flex flex-wrap gap-3">
+              {values.map((v) => (
+                <li
+                  key={v.key}
+                  className="flex items-center gap-2.5 rounded-full border-2 border-forest/10 py-1.5 pl-1.5 pr-4 text-sm font-semibold transition-colors hover:border-lime hover:bg-forest hover:text-cream"
                 >
-                  <BadgeIcon name={v.icon} className="w-12 h-12 shrink-0" />
-                  <div>
-                    <h3 className="font-display font-bold text-xl">{t(`about.${v.key}_t`)}</h3>
-                    <p className="text-sm opacity-70 mt-0.5">{t(`about.${v.key}_d`)}</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                  <BadgeIcon name={v.icon} className="h-8 w-8 shrink-0" />
+                  {t(`about.${v.key}_t`)}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
 
           {/* Stats */}
           <div className="mt-10 grid grid-cols-3 gap-4">

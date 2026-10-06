@@ -4,28 +4,32 @@ import LegalLayout, { LegalSection, Placeholder } from "@/components/LegalLayout
 
 export default function Impressum() {
   return (
-    <LegalLayout title="Impressum" updated="8 July 2026">
+    <LegalLayout title="Impressum" updated="4 October 2026">
       <LegalSection title="Angaben gemäß § 5 DDG">
         <p>
-          <Placeholder>[Rechtsform &amp; vollständiger Firmenname, z. B. kokoland GmbH]</Placeholder>
+          Kokoland Gastro UG (haftungsbeschränkt)
           <br />
-          <Placeholder>[Straße und Hausnummer]</Placeholder>
+          Petersburger Str. 39
           <br />
-          <Placeholder>[PLZ und Ort, Deutschland]</Placeholder>
+          10249 Berlin, Deutschland
         </p>
       </LegalSection>
 
       <LegalSection title="Vertreten durch">
         <p>
-          <Placeholder>[Name der/des Geschäftsführenden bzw. Inhaber:in]</Placeholder>
+          Geschäftsführer:
+          <br />
+          Sony Thellappilly Skariah
+          <br />
+          Abhishek Mavingal
         </p>
       </LegalSection>
 
       <LegalSection title="Kontakt">
         <p>
-          Telefon: <Placeholder>[Telefonnummer]</Placeholder>
+          Telefon: +49 176 24404981
           <br />
-          E-Mail: <Placeholder>[hello@kokoland.berlin o. Ä.]</Placeholder>
+          E-Mail: info@kokolandberlin.com
         </p>
       </LegalSection>
 
@@ -33,12 +37,9 @@ export default function Impressum() {
         <p>
           Eintragung im Handelsregister.
           <br />
-          Registergericht: <Placeholder>[Amtsgericht, z. B. Amtsgericht Charlottenburg]</Placeholder>
+          Registergericht: Amtsgericht Charlottenburg (Berlin)
           <br />
-          Registernummer: <Placeholder>[HRB-Nummer]</Placeholder>
-        </p>
-        <p className="text-cream/65 text-xs">
-          Falls kein Handelsregistereintrag besteht (z. B. Einzelunternehmen ohne Eintragung), diesen Abschnitt entfernen.
+          Registernummer: HRB 261554 B
         </p>
       </LegalSection>
 
@@ -46,13 +47,13 @@ export default function Impressum() {
         <p>
           Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:
           <br />
-          <Placeholder>[USt-IdNr.]</Placeholder>
+          DE368507346
         </p>
       </LegalSection>
 
       <LegalSection title="Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV">
         <p>
-          <Placeholder>[Name, Anschrift wie oben]</Placeholder>
+          Sony Thellappilly Skariah, Kokoland Gastro UG (haftungsbeschränkt), Anschrift wie oben
         </p>
       </LegalSection>
 

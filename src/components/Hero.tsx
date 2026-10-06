@@ -2,9 +2,10 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-const heroFood = "/assets/hero-food.svg";
+const heroFood = "/assets/hero-photo.jpg";
 import Magnetic from "./Magnetic";
 import Marquee from "./Marquee";
 import { Motif } from "./Brand";
@@ -12,7 +13,7 @@ import { StampField } from "./BrandDecor";
 
 const Hero = () => {
   const { t } = useTranslation();
-  const headline = [t("hero.line1"), t("hero.line2"), t("hero.line3")];
+  const headline = [t("hero.line1"), t("hero.line2"), t("hero.line3")].filter(Boolean);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
@@ -48,17 +49,16 @@ const Hero = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2.5 mb-7 bg-lime/15 text-lime rounded-full pl-2 pr-4 py-1.5"
+            className="inline-flex items-center gap-2.5 mb-7 bg-lime/15 text-lime rounded-full p-1.5"
           >
             <span className="bg-lime text-forest text-[11px] font-bold rounded-full px-2.5 py-0.5">
               {t("hero.badge")}
             </span>
-            <span className="text-xs font-medium tracking-wide">
-              {t("hero.tagline")}
-            </span>
+            {/* Tagline hidden for now — restore this span to bring back
+                "Restobar · Kreuzberg meets Kochi" (t("hero.tagline")). */}
           </motion.div>
 
-          <h1 className="font-display font-extrabold leading-[0.95] tracking-tight text-[15vw] lg:text-[7vw]">
+          <h1 className="font-display font-extrabold leading-[0.95] tracking-tight text-[clamp(2.2rem,9.5vw,3.5rem)] sm:text-[clamp(3rem,8vw,4.5rem)] lg:text-[clamp(3rem,6.4vw,5.5rem)]">
             {headline.map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <motion.span
@@ -89,13 +89,13 @@ const Hero = () => {
             className="mt-9 flex flex-wrap gap-4"
           >
             <Magnetic>
-              <a
-                href="#menu"
+              <Link
+                href="/menu"
                 className="inline-flex items-center gap-2 bg-lime text-forest font-semibold text-lg rounded-full px-8 py-4 hover:bg-cream transition-colors soft-shadow"
               >
                 {t("hero.order")}
                 <ArrowRight className="w-5 h-5" />
-              </a>
+              </Link>
             </Magnetic>
             <Magnetic>
               <a
@@ -122,7 +122,7 @@ const Hero = () => {
             <motion.img
               src={heroFood}
               alt="Kerala feast at kokoland"
-              className="w-full h-[440px] lg:h-[540px] object-cover"
+              className="w-full h-[520px] lg:h-[660px] object-cover object-[50%_34%]"
               whileHover={{ scale: 1.06 }}
               transition={{ duration: 0.6 }}
             />
@@ -135,8 +135,8 @@ const Hero = () => {
                 <defs>
                   <path id="heroCircle" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
                 </defs>
-                <text className="fill-lime text-[10px] font-semibold uppercase tracking-[0.2em]">
-                  <textPath href="#heroCircle">{t("hero.stamp")}</textPath>
+                <text className="fill-lime text-[8.5px] font-semibold uppercase tracking-[0.2em]">
+                  <textPath href="#heroCircle" textLength="228" lengthAdjust="spacing">{t("hero.stamp")}</textPath>
                 </text>
               </svg>
             </div>
@@ -157,7 +157,7 @@ const Hero = () => {
       {/* Bottom marquee */}
       <div className="absolute bottom-0 inset-x-0 bg-lime text-forest py-3">
         <Marquee>
-          {["FISH MOILEE", "MALABAR BIRYANI", "APPAM & STEW", "BEEF FRY", "CHICKEN 65", "PAYASAM", "MASALA CHAI"].map(
+          {["FISH MOILEE", "MALABAR BIRYANI", "APPAM & STEW", "BEEF FRY", "CHICKEN 65", "GOBI MANCHURIAN", "PAYASAM"].map(
             (dish) => (
               <span key={dish} className="font-display font-bold text-lg mx-6 flex items-center gap-6">
                 {dish} <span className="text-chili">●</span>

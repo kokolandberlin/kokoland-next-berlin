@@ -10,14 +10,21 @@ import { useAuth } from "@/context/AuthContext";
 import Magnetic from "./Magnetic";
 import LanguageSelector from "./LanguageSelector";
 import ThemeSwitcher from "./ThemeSwitcher";
-const logo = "/assets/brand/kokoland-logo.png";
+import { STORY_LIVE } from "@/data/story";
+const logo = "/assets/brand/kokoland-logo-wide.png";
+const logoMark = "/assets/brand/kokoland-mark.png";
+
+const SHOW_BLOG = false;
 
 const links = [
   { key: "story", href: "/#about" },
-  { key: "menu", href: "/#menu" },
-  { key: "catering", href: "/#catering" },
+  ...(STORY_LIVE ? [{ key: "ourStory", href: "/our-story" }] : []),
+  { key: "menu", href: "/menu" },
   { key: "reserve", href: "/#reservation" },
+  { key: "catering", href: "/#catering" },
   { key: "events", href: "/#events" },
+  // The blog is built but parked: set to true to show it in the menu again.
+  ...(SHOW_BLOG ? [{ key: "blog", href: "/blog" }] : []),
   { key: "contact", href: "/#contact" },
 ];
 
@@ -50,11 +57,17 @@ const Navbar = () => {
             }`}
           >
             <Link href="/#top" className="flex items-center gap-2">
+              {/* Phones: elephant mark only, so the header icons keep their room. */}
+              <img
+                src={logoMark}
+                alt="kokoland"
+                className={`sm:hidden object-contain transition-all duration-300 ${scrolled ? "h-8" : "h-10"}`}
+              />
               <img
                 src={logo}
                 alt="kokoland"
-                className={`object-contain transition-all duration-300 ${
-                  scrolled ? "h-8" : "h-11"
+                className={`hidden sm:block object-contain transition-all duration-300 ${
+                  scrolled ? "h-8" : "h-9 xl:h-11"
                 } ${scrolled ? "" : "drop-shadow"}`}
               />
             </Link>

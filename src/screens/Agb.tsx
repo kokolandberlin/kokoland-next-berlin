@@ -8,7 +8,7 @@ export default function Agb() {
       <LegalSection title="1. Geltungsbereich">
         <p>
           Diese Allgemeinen Geschäftsbedingungen gelten für alle Bestellungen von Speisen und Getränken, die über die
-          Website kokoland.berlin (Lieferung oder Abholung) bei <Placeholder>[Firmenname wie im Impressum]</Placeholder>
+          Website kokoland.de (Lieferung oder Abholung) bei Kokoland Gastro UG (haftungsbeschränkt)
           {" "}(&quot;kokoland&quot;, &quot;wir&quot;) aufgegeben werden.
         </p>
       </LegalSection>
@@ -26,7 +26,7 @@ export default function Agb() {
         <p>
           Alle angegebenen Preise sind Endpreise in Euro inklusive der gesetzlichen Mehrwertsteuer. Bei Lieferung
           fällt zusätzlich die auf der Website angezeigte Liefergebühr an, abhängig von Ihrer Postleitzahl. Die
-          Zahlung erfolgt <Placeholder>[Zahlungsarten ergänzen, z. B. Zahlung an der Tür / online via Kredit- oder Debitkarte über Stripe]</Placeholder>.
+          Zahlung erfolgt im Restaurant bzw. bei Abholung (bar oder per Karte) oder, wo angeboten, online per Kredit- oder Debitkarte, Apple Pay oder Google Pay über unseren Zahlungsdienstleister Stripe. Bei Online-Zahlung wird der Betrag mit Abschluss der Bestellung belastet.
         </p>
       </LegalSection>
 
@@ -44,9 +44,15 @@ export default function Agb() {
           oder deren Verfallsdatum schnell überschritten würde, ist das gesetzliche Widerrufsrecht gemäß § 312g Abs. 2
           Nr. 2 BGB ausgeschlossen. Ein Widerruf der Bestellung nach Vertragsschluss ist daher nicht möglich.
         </p>
-        <p className="text-cream/65 text-xs">
-          Gilt nicht für etwaige nicht-verderbliche Produkte (z. B. Gutscheine, Merchandise), sofern kokoland solche
-          anbietet — für diese gilt das reguläre 14-tägige Widerrufsrecht. <Placeholder>[Diesen Absatz entfernen, falls kokoland keine solchen Produkte verkauft, oder eine gesonderte Widerrufsbelehrung ergänzen, falls doch.]</Placeholder>
+
+      </LegalSection>
+
+      <LegalSection title="5a. Vorbestellung und Tischreservierung">
+        <p>
+          Bei einer Vorbestellung mit gewünschter Uhrzeit (Abholung oder Essen vor Ort) bereiten wir die Speisen passend
+          zu diesem Zeitpunkt zu. Bitte sagen Sie Änderungen oder eine Absage spätestens 2 Stunden vorher telefonisch ab
+          (+49 176 24404981). Bei späterer Absage oder Nichterscheinen können bereits zubereitete Speisen nicht erstattet
+          werden. Tischreservierungen ohne Vorbestellung sind kostenlos.
         </p>
       </LegalSection>
 

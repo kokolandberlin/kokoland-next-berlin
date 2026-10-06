@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import CustomCursor from "@/components/CustomCursor";
 import CookieBanner from "@/components/CookieBanner";
+import TableBanner from "@/components/TableBanner";
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           <CookieConsentProvider>
             <CustomCursor />
             {children}
+            <TableBanner />
             <CookieBanner />
           </CookieConsentProvider>
         </CartProvider>

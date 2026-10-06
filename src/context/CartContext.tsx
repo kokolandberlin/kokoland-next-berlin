@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 
 export type CartItem = {
   id: string;
@@ -15,6 +15,9 @@ type CartContextType = {
   removeItem: (name: string) => void;
   setQty: (name: string, qty: number) => void;
   clear: () => void;
+  /** The table a guest scanned (QR on the table), kept for the visit. Null = not ordering at a table. */
+  table: string | null;
+  setTable: (table: string | null) => void;
   count: number;
   total: number;
   open: boolean;
@@ -26,6 +29,25 @@ const CartContext = createContext<CartContextType | null>(null);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [open, setOpen] = useState(false);
+  const [table, setTableState] = useState<string | null>(null);
+
+  // Remember the table for this visit (a refresh or a trip to another page must not forget it).
+  useEffect(() => {
+    try {
+      setTableState(sessionStorage.getItem("kokoland.table"));
+    } catch {
+      /* storage unavailable: the table lives in memory only */
+    }
+  }, []);
+  const setTable = (next: string | null) => {
+    setTableState(next);
+    try {
+      if (next) sessionStorage.setItem("kokoland.table", next);
+      else sessionStorage.removeItem("kokoland.table");
+    } catch {
+      /* ignore */
+    }
+  };
 
   const addItem = (id: string, name: string, price: number) =>
     setItems((prev) => {
@@ -58,7 +80,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, setQty, clear, count, total, open, setOpen }}
+      value={{ items, addItem, removeItem, setQty, clear, table, setTable, count, total, open, setOpen }}
     >
       {children}
     </CartContext.Provider>

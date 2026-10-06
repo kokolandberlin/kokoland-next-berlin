@@ -13,14 +13,14 @@ export default function Datenschutz() {
         <p>
           Verantwortlicher im Sinne der DSGVO ist:
           <br />
-          <Placeholder>[Firmenname wie im Impressum]</Placeholder>, <Placeholder>[Anschrift]</Placeholder>
+          Kokoland Gastro UG (haftungsbeschränkt), Petersburger Str. 39, 10249 Berlin
           <br />
-          E-Mail: <Placeholder>[Datenschutz-E-Mail, z. B. privacy@kokoland.berlin]</Placeholder>
+          E-Mail: info@kokolandberlin.com
         </p>
       </LegalSection>
 
       <LegalSection title="2. Welche Daten wir verarbeiten">
-        <p><strong>Beim Besuch der Website:</strong> technische Zugriffsdaten (IP-Adresse, Browsertyp, Zeitpunkt) durch unseren Hosting-Anbieter <Placeholder>[Hosting-Anbieter, z. B. Vercel Inc.]</Placeholder>, ausschließlich zur Bereitstellung der Website und Absicherung gegen Missbrauch.</p>
+        <p><strong>Beim Besuch der Website:</strong> technische Zugriffsdaten (IP-Adresse, Browsertyp, Zeitpunkt) durch unseren Hosting-Anbieter Vercel Inc., ausschließlich zur Bereitstellung der Website und Absicherung gegen Missbrauch.</p>
         <p><strong>Bei Kontoerstellung / Login:</strong> E-Mail-Adresse und Passwort (verschlüsselt gespeichert), verwaltet über unseren Authentifizierungs-Anbieter Supabase.</p>
         <p><strong>Bei Bestellungen:</strong> Name, E-Mail-Adresse, ggf. Liefer­adresse und Postleitzahl, Bestellinhalt, Zahlungsstatus. Diese Daten werden an unser Restaurant-Verwaltungssystem übermittelt, um die Bestellung zuzubereiten und auszuliefern.</p>
         <p><strong>Treueprogramm:</strong> E-Mail-Adresse, Punktestand und Bestellhistorie, sofern Sie sich für das Treueprogramm anmelden.</p>
@@ -39,9 +39,11 @@ export default function Datenschutz() {
       <LegalSection title="4. Empfänger / Auftragsverarbeiter">
         <p>Wir setzen folgende Dienstleister ein, mit denen jeweils Auftragsverarbeitungsverträge (Art. 28 DSGVO) bestehen bzw. bestehen werden:</p>
         <ul className="list-disc pl-5 space-y-1">
-          <li>Supabase Inc. — Datenbank, Authentifizierung. Serverstandort: <Placeholder>[Region bestätigen, z. B. EU-Frankfurt]</Placeholder></li>
-          <li><Placeholder>[Hosting-Anbieter]</Placeholder> — Auslieferung der Website</li>
-          <li>Stripe — Zahlungsabwicklung (sobald aktiv)</li>
+          <li>Supabase Inc. — Datenbank, Authentifizierung (Kundenkonto). Serverstandort: Frankfurt am Main (EU, AWS eu-central-1)</li>
+          <li>Vercel Inc. — Auslieferung der Website</li>
+          <li>Stripe — Zahlungsabwicklung bei Online-Zahlung (Karte, Apple Pay, Google Pay)</li>
+          <li>Resend — Versand von E-Mails (Bestellbestätigungen, Anmeldecodes)</li>
+          <li>SumUp — Kartenzahlung im Restaurant</li>
         </ul>
         <p className="text-cream/65 text-xs">
           Bei Übermittlung in Drittländer (außerhalb der EU/des EWR) stützen wir uns auf Standardvertragsklauseln der EU-Kommission.
@@ -62,7 +64,15 @@ export default function Datenschutz() {
         <p>
           Wir speichern personenbezogene Daten nur so lange, wie es für den jeweiligen Zweck erforderlich ist oder
           gesetzliche Aufbewahrungspflichten (z. B. handels- und steuerrechtlich, i. d. R. 6–10 Jahre für
-          Rechnungsdaten) bestehen. <Placeholder>[Konkrete Löschfristen pro Datenkategorie ergänzen]</Placeholder>
+          Rechnungsdaten) bestehen. Im Einzelnen:
+        </p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Bestell-, Zahlungs- und Rechnungsdaten: 10 Jahre (§ 147 AO, § 257 HGB).</li>
+          <li>Kundenkonto (Name, E-Mail, Telefon, Geburtstag, Punkte): bis Sie Ihr Konto selbst löschen. Dort können Sie Ihre Daten auch herunterladen.</li>
+          <li>Newsletter-Einwilligung: bis zum Widerruf.</li>
+          <li>Reservierungen und Vorbestellungen: bis zu 12 Monate nach dem Termin, soweit nicht Teil der Rechnungsdaten.</li>
+        </ul>
+        <p>
         </p>
       </LegalSection>
 
@@ -82,7 +92,7 @@ export default function Datenschutz() {
 
       <LegalSection title="8. Kontakt">
         <p>
-          Für Anfragen zum Datenschutz wenden Sie sich an <Placeholder>[Datenschutz-E-Mail]</Placeholder>. Weitere
+          Für Anfragen zum Datenschutz wenden Sie sich an info@kokolandberlin.com. Weitere
           Informationen zum Betreiber finden Sie im <Link href="/impressum" className="text-lime underline underline-offset-2">Impressum</Link>.
         </p>
       </LegalSection>

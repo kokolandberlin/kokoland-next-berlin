@@ -7,7 +7,7 @@ import Marquee from "./Marquee";
 import { Motif } from "./Brand";
 import { StampField } from "./BrandDecor";
 import { useCookieConsent } from "@/context/CookieConsentContext";
-const logo = "/assets/brand/kokoland-logo.png";
+const logo = "/assets/brand/kokoland-logo-wide.png";
 
 const legalLinks = [
   { key: "impressum", href: "/impressum" },
@@ -17,11 +17,13 @@ const legalLinks = [
 
 const navLinks = [
   { key: "story", h: "/#about" },
-  { key: "menu", h: "/#menu" },
-  { key: "gallery", h: "/#gallery" },
+  { key: "menu", h: "/menu" },
+  { key: "kerala", h: "/kerala" },
+  { key: "onam", h: "/onam-sadhya" },
   { key: "catering", h: "/#catering" },
   { key: "reserve", h: "/#reservation" },
   { key: "events", h: "/#events" },
+  { key: "blog", h: "/blog" },
   { key: "contact", h: "/#contact" },
 ];
 
@@ -77,8 +79,8 @@ const Footer = () => {
           ))}
         </div>
         <p className="text-cream/60 text-xs mt-6">
-          123 Kokoland Street · 10115 Berlin<br />
-          hello@kokoland.berlin
+          Petersburger Str. 39 · 10249 Berlin<br />
+          info@kokolandberlin.com
         </p>
       </div>
     </div>

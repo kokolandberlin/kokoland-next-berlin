@@ -2,6 +2,37 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: import.meta.dirname,
+  // Permanent redirects that keep the old WordPress/WooCommerce URLs' search
+  // value on kokoland.de. The new site is a single page plus a few routes, so
+  // old shop/product/event URLs land on the matching section.
+  async redirects() {
+    const hostRedirects = ["kokolandberlin.com", "www.kokolandberlin.com", "www.kokoland.de"].map((host) => ({
+      source: "/:path*",
+      has: [{ type: "host", value: host }],
+      destination: "https://kokoland.de/:path*",
+      permanent: true,
+    }));
+    // Old URLs end in "/"; Next first 308s them to the slash-less form, then
+    // these run, so an old URL takes two permanent hops. Fine for search.
+    const to = (destination, ...sources) =>
+      sources.map((source) => ({ source, destination, permanent: true }));
+    return [
+      ...hostRedirects,
+      ...to("/menu", "/shop", "/shop/:path*", "/product-category/:path*", "/product/:path*", "/product-tag/:path*", "/delivery", "/cart", "/checkout"),
+      ...to("/account", "/my-account", "/my-account/:path*"),
+      ...to("/#contact", "/contact"),
+      ...to(
+        "/onam-sadhya",
+        "/kokoland-onam-sadya-2022",
+        "/kokoland-sadya-2023",
+        "/kokoland-onam-sadhya-2025",
+        "/kokoland-onam-sadhya-2026",
+      ),
+      ...to("/#events", "/events", "/events/:path*", "/keff-championship-2026-berlin", "/kokoland-komabansfc"),
+      ...to("/datenschutz", "/privacy-policy"),
+      ...to("/agb", "/refund_returns"),
+    ];
+  },
   webpack(config) {
     // Brand.tsx / BrandDecor.tsx inline single-color SVGs via `?raw` so they
     // inherit currentColor. Mirror Vite's `?raw` loader.

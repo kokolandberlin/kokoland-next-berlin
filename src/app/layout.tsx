@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kokolandberlin.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "kokoland — Kerala flavors, Berlin home",
     template: "%s — kokoland",
   },
   description:
-    "kokoland — a Kerala restobar in Berlin. Tropical South Indian flavors, house brews and good company. 100% pure, properly spiced.",
+    "kokoland — a Kerala restobar in Berlin. Indian street food and Kerala classics, house brews and good company.",
   openGraph: {
     title: "kokoland — Kerala flavors, Berlin home",
     description:
-      "A Kerala restobar in Berlin. Tropical South Indian flavors, house brews and good company.",
-    url: "https://kokolandberlin.com",
+      "A Kerala restobar in Berlin: Indian street food, Kerala classics and house brews.",
+    url: SITE_URL,
     siteName: "kokoland",
     locale: "en_US",
     type: "website",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "kokoland — Kerala flavors, Berlin home",
     description:
-      "A Kerala restobar in Berlin. Tropical South Indian flavors, house brews and good company.",
+      "A Kerala restobar in Berlin: Indian street food, Kerala classics and house brews.",
   },
 };
 

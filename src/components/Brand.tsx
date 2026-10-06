@@ -20,6 +20,7 @@ import pure from "@/assets/brand/icons/pure.svg?raw";
 import pods from "@/assets/brand/icons/pods.svg?raw";
 import drink from "@/assets/brand/icons/drink.svg?raw";
 import organic from "@/assets/brand/icons/organic.svg?raw";
+import cake from "@/assets/brand/icons/cake.svg?raw";
 
 // Expanded brand-symbol set (Style 2 "Bazaar"): proteins, decor & Kerala
 // musical instruments / ornaments.
@@ -75,7 +76,8 @@ export type IconName =
   | "pure"
   | "pods"
   | "drink"
-  | "organic";
+  | "organic"
+  | "cake";
 
 export type SymbolName =
   | "fish"
@@ -127,6 +129,7 @@ const icons: Record<IconName, string> = {
   pods,
   drink,
   organic,
+  cake,
 };
 
 const symbols: Record<SymbolName, string> = {
