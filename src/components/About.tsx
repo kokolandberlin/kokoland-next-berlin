@@ -55,6 +55,20 @@ const PLATE_TABLE: PlateSpot[] = [
   { photo: plates.gheeRice, left: "18%", top: "83%", vw: 9, min: 60, max: 125, drift: 20, spin: -55, tilt: 0, desktopOnly: true },
 ];
 
+// A phone has a narrow stage, so it gets its own arrangement: one big plate dead centre and the
+// rest evenly around it, mirrored left and right.
+const PLATE_TABLE_PHONE: PlateSpot[] = [
+  { photo: plates.kappaFish, left: "50%", top: "24%", vw: 54, min: 150, max: 240, drift: 10, spin: 40, tilt: 0, centerX: true },
+  { photo: plates.porottaBeef, left: "-3%", top: "1%", vw: 31, min: 100, max: 160, drift: 14, spin: 55, tilt: -8 },
+  { photo: plates.puttuKadala, left: "67%", top: "-1%", vw: 31, min: 100, max: 160, drift: 16, spin: 45, tilt: 12 },
+  { photo: plates.coconutPudding, left: "50%", top: "-3%", vw: 18, min: 60, max: 90, drift: 18, spin: -60, tilt: 0, centerX: true },
+  { photo: plates.paneerChilli, left: "-5%", top: "37%", vw: 27, min: 86, max: 140, drift: 16, spin: -65, tilt: 0 },
+  { photo: plates.kokoChicken, left: "73%", top: "38%", vw: 27, min: 86, max: 140, drift: 16, spin: 60, tilt: 0 },
+  { photo: plates.beefDry, left: "-1%", top: "70%", vw: 31, min: 100, max: 160, drift: 14, spin: 50, tilt: -6 },
+  { photo: plates.samosa, left: "68%", top: "71%", vw: 29, min: 94, max: 150, drift: 14, spin: 50, tilt: 10 },
+  { photo: plates.chickenRoll, left: "50%", top: "80%", vw: 26, min: 84, max: 130, drift: 12, spin: -45, tilt: 8, centerX: true },
+];
+
 const About = () => {
   const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
@@ -62,17 +76,24 @@ const About = () => {
 
   return (
     <section id="about" ref={ref} className="relative bg-cream text-forest py-28 overflow-hidden">
-      <Motif name="palm-tree" className="absolute top-8 right-12 w-28 text-lime pointer-events-none" />
+      <Motif name="palm-tree" className="absolute top-8 right-12 hidden w-28 text-lime pointer-events-none lg:block" />
       <StampField variant="about" />
 
       <div className="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-8 lg:gap-24 lg:items-stretch">
         {/* Cut-out plates, as tall as the text beside them */}
-        <div className="relative z-20 h-[380px] sm:h-[540px] lg:h-auto lg:min-h-[760px]">
-          <FloatingPlates spots={PLATE_TABLE} progress={scrollYProgress} ringSizes={[380, 560]} />
+        <div className="relative z-20 h-[430px] sm:h-[540px] lg:h-auto lg:min-h-[760px]">
+          <div className="absolute inset-0 md:hidden">
+            <FloatingPlates spots={PLATE_TABLE_PHONE} progress={scrollYProgress} ringSizes={[250, 360]} />
+          </div>
+          <div className="absolute inset-0 hidden md:block">
+            <FloatingPlates spots={PLATE_TABLE} progress={scrollYProgress} ringSizes={[380, 560]} />
+          </div>
         </div>
 
         {/* Text */}
-        <div className="flex flex-col justify-center">
+        <div className="relative flex flex-col justify-center">
+          {/* Phones: the palm sits beside the headline instead of floating above the plates. */}
+          <Motif name="palm-tree" className="pointer-events-none absolute -top-2 right-0 w-14 text-lime lg:hidden" />
           <Reveal>
             <span className="text-sm font-semibold uppercase tracking-[0.25em] text-chili">
               {t("about.kicker")}
@@ -121,12 +142,12 @@ const About = () => {
             ].map((s) => (
               <div
                 key={s.label}
-                className="rounded-2xl bg-forest text-cream p-5 text-center hover:bg-chili transition-colors"
+                className="min-w-0 rounded-2xl bg-forest text-cream p-3 sm:p-5 text-center hover:bg-chili transition-colors"
               >
-                <div className="font-display font-extrabold text-4xl text-lime">
+                <div className="font-display font-extrabold text-[clamp(1.5rem,7vw,2.25rem)] sm:text-4xl leading-none text-lime">
                   <Counter to={s.to} suffix={s.suffix} />
                 </div>
-                <div className="text-xs font-medium uppercase tracking-widest mt-1 opacity-80">
+                <div className="text-[10px] sm:text-xs font-medium uppercase tracking-wider sm:tracking-widest mt-2 opacity-80">
                   {s.label}
                 </div>
               </div>

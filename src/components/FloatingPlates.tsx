@@ -17,6 +17,8 @@ export interface PlateSpot {
   spin: number;
   /** Starting tilt (deg). */
   tilt?: number;
+  /** Centre the plate on `left` (instead of starting at it): used for the middle plate on phones. */
+  centerX?: boolean;
   /** Hide on phones, where the stage is too narrow for every plate. */
   desktopOnly?: boolean;
 }
@@ -37,6 +39,7 @@ const Plate = ({ spot, progress, still, index }: { spot: PlateSpot; progress: Mo
         left: spot.left,
         top: spot.top,
         width: `clamp(${spot.min ?? 84}px, ${spot.vw}vw, ${spot.max}px)`,
+        x: spot.centerX ? "-50%" : 0,
         y: still ? 0 : y,
         rotate: still ? spot.tilt ?? 0 : rotate,
       }}
