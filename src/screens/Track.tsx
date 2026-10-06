@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { CheckCircle2, Circle, Loader2, AlertTriangle } from "lucide-react";
-import { supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
 import { formatEur } from "@/data/menu";
 import {
   deriveStage,

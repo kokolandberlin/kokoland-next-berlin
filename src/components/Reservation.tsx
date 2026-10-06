@@ -9,7 +9,7 @@ import Reveal from "./Reveal";
 import { Motif } from "./Brand";
 import FloatingPlates, { type PlateSpot } from "./FloatingPlates";
 import { plates } from "@/data/food-photos";
-import { supabase, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, DISHDATA_SLUG } from "@/lib/supabase";
 import { berlinToISO } from "@/lib/berlin-time";
 
 // Plates around the headline; they drift and turn as the section scrolls by.

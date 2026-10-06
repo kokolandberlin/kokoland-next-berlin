@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { supabasePublic as supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export type DeliveryZone = {
   id: string;

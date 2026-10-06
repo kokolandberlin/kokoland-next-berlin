@@ -16,7 +16,7 @@ import Reveal from "@/components/Reveal";
 import Magnetic from "@/components/Magnetic";
 import { Motif, Symbol } from "@/components/Brand";
 import { FriezeDivider, StampField } from "@/components/BrandDecor";
-import { supabase, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, DISHDATA_SLUG } from "@/lib/supabase";
 import { orderCategories, type CateringDish, type CateringMenu, type CateringTier } from "@/lib/catering";
 
 const strings = (de: boolean) =>

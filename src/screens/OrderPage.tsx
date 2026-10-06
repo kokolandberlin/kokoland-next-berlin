@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { CheckCircle2, Loader2, Footprints, CreditCard } from "lucide-react";
-import { supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
 import { formatEur } from "@/data/menu";
 
 interface OrderCard {

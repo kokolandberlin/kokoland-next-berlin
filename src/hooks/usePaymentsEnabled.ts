@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
 
 /**
  * True once the restaurant has finished connecting Stripe in DishData

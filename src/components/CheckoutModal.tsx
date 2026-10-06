@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useCart } from "@/context/CartContext";
 import { useDeliveryZones } from "@/hooks/useDeliveryZones";
 import { useModalA11y } from "@/hooks/useModalA11y";
-import { supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, isSupabaseConfigured, DISHDATA_SLUG } from "@/lib/supabase";
 import { formatEur } from "@/data/menu";
 import { DELIVERY_LIVE, DELIVERY_PARTNERS } from "@/lib/site";
 import { usePaymentsEnabled } from "@/hooks/usePaymentsEnabled";

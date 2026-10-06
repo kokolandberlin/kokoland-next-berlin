@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, DISHDATA_SLUG } from "@/lib/supabase";
+import { supabasePublic as supabase, DISHDATA_SLUG } from "@/lib/supabase";
 import { Dish, DishDataRecipe, recipeToDish } from "@/lib/types";
 import { dishes as rawStaticDishes } from "@/data/menu";
 

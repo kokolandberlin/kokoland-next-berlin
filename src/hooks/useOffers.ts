@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabasePublic as supabase } from "@/lib/supabase";
 import { Offer } from "@/lib/types";
 
 // Public offers. RLS already restricts anon reads to active, in-window offers,

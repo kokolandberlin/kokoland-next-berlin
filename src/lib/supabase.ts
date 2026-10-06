@@ -35,3 +35,13 @@ export const supabase = createClient(
     },
   },
 );
+
+/**
+ * For anything a visitor can do without being signed in (menu, events, reservations, orders,
+ * catering). It never carries a login token: a stale or expired one from a signed-in guest would
+ * make these calls fail (the menu fell back to the static list), while the public data does not
+ * need it. Account features keep using `supabase` above.
+ */
+export const supabasePublic = createClient(url || "https://placeholder.supabase.co", anonKey || "placeholder-anon-key", {
+  auth: { persistSession: false, autoRefreshToken: false },
+});
