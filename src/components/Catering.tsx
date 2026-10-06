@@ -32,7 +32,7 @@ const Catering = () => {
               src="/assets/hero-loop.mp4"
               poster="/assets/hero-loop-poster.jpg"
               label="Kerala dishes ready to be catered by kokoland"
-              className="w-full h-[520px] lg:h-[620px] object-cover object-[50%_40%]"
+              className="w-full h-[400px] sm:h-[480px] lg:h-[620px] object-cover object-[50%_40%]"
             />
             <div className="absolute bottom-6 left-4 bg-chili text-cream font-display font-bold text-sm rounded-full px-4 py-2 rotate-[-4deg]">
               {t("catering.badge")}
