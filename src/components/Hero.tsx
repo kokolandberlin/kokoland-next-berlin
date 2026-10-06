@@ -122,7 +122,7 @@ const Hero = () => {
             <motion.img
               src={heroFood}
               alt="Kerala feast at kokoland"
-              className="w-full h-[300px] sm:h-[420px] lg:h-[660px] object-cover object-[50%_30%]"
+              className="w-full h-[340px] sm:h-[460px] lg:h-[660px] object-cover object-[50%_88%] sm:object-[50%_70%] lg:object-[50%_34%]"
               whileHover={{ scale: 1.06 }}
               transition={{ duration: 0.6 }}
             />
