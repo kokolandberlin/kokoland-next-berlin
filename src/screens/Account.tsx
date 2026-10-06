@@ -106,10 +106,37 @@ const strings = (de: boolean) =>
         loadError: "We could not load your account.",
       };
 
+// Names that come from DishData's loyalty program are stored in English there. For German visitors
+// the standard ones are translated here; anything a restaurant renamed is shown as written.
+const DE_LOYALTY: Record<string, string> = {
+  "€5 off": "5 € Rabatt",
+  "Take €5 off your next order": "5 € Rabatt auf deine nächste Bestellung",
+  "10% off": "10 % Rabatt",
+  "10% off your whole order": "10 % Rabatt auf deine ganze Bestellung",
+  "Free delivery": "Gratis-Lieferung",
+  "We cover delivery on your next order": "Wir übernehmen die Lieferung deiner nächsten Bestellung",
+  "Make a purchase": "Einkauf",
+  "Earn points on every order": "Punkte bei jeder Bestellung",
+  "Create an account": "Konto erstellen",
+  "Welcome bonus for joining": "Willkommensbonus",
+  "Birthday treat": "Geburtstagsgeschenk",
+  "Bonus points every birthday": "Bonuspunkte zu jedem Geburtstag",
+  "Subscribe to the newsletter": "Newsletter abonnieren",
+  "One-time bonus for opting in": "Einmaliger Bonus fürs Anmelden",
+  "Follow on Instagram": "Auf Instagram folgen",
+  "One-time bonus for following": "Einmaliger Bonus fürs Folgen",
+  "Leave a review": "Bewertung schreiben",
+  "Thank-you points for feedback": "Dankeschön-Punkte für dein Feedback",
+  Silver: "Silber",
+  Platinum: "Platin",
+};
+
 const Account = () => {
   const { i18n } = useTranslation();
   const de = (i18n.language || "en").startsWith("de");
   const x = strings(de);
+  // Translate a loyalty name for German visitors (falls back to the text as stored).
+  const tr = (text: string | null | undefined) => (text ? (de ? DE_LOYALTY[text] ?? text : text) : text ?? "");
   const router = useRouter();
   const { session, loading: authLoading, signOut } = useAuth();
   const { account, loading, error, reload } = useMyAccount();
@@ -273,7 +300,7 @@ const Account = () => {
                 />
                 <div className="relative">
                   <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-sm font-bold text-forest" style={{ background: tierColor }}>
-                    <span className="h-2 w-2 rounded-full bg-forest/70" /> {c.tier}
+                    <span className="h-2 w-2 rounded-full bg-forest/70" /> {tr(c.tier)}
                   </span>
                   <p className="mt-6 text-sm text-cream/65">{x.yourPoints}</p>
                   <p className="font-display text-6xl font-extrabold leading-none text-lime sm:text-7xl">{c.points.toLocaleString()}</p>
@@ -281,7 +308,7 @@ const Account = () => {
                     <div className="h-2.5 overflow-hidden rounded-full bg-cream/15">
                       <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.9, ease: "easeOut" }} className="h-full rounded-full bg-lime" />
                     </div>
-                    <p className="mt-2 text-xs text-cream/70">{nextTier ? x.toNext(Math.max(0, Math.ceil(nextTier.threshold - metric)), nextTier.name) : x.topTier}</p>
+                    <p className="mt-2 text-xs text-cream/70">{nextTier ? x.toNext(Math.max(0, Math.ceil(nextTier.threshold - metric)), tr(nextTier.name)) : x.topTier}</p>
                   </div>
                   <div className="mt-6 grid grid-cols-3 gap-3 border-t border-cream/10 pt-5 text-center">
                     {[
@@ -323,8 +350,8 @@ const Account = () => {
                             <span className="rounded-full bg-forest/60 px-3 py-1 text-xs font-bold text-lime">{r.cost_points} {x.points}</span>
                           </div>
                           <div>
-                            <p className="font-display text-xl font-extrabold">{r.label}</p>
-                            {r.description && <p className="mt-0.5 text-sm text-cream/60">{r.description}</p>}
+                            <p className="font-display text-xl font-extrabold">{tr(r.label)}</p>
+                            {r.description && <p className="mt-0.5 text-sm text-cream/60">{tr(r.description)}</p>}
                           </div>
                           {!can && !locked && (
                             <div>
@@ -355,7 +382,7 @@ const Account = () => {
                   {account.vouchers.map((v) => (
                     <li key={v.code} className="flex items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-lime/40 bg-lime/5 px-5 py-4">
                       <span className="min-w-0">
-                        <span className="block font-semibold">{v.label}</span>
+                        <span className="block font-semibold">{tr(v.label)}</span>
                         {v.expires_at && <span className="text-xs text-cream/55">{x.validUntil} {fmt(v.expires_at)}</span>}
                       </span>
                       <span className="shrink-0 rounded-lg bg-forest px-3 py-1.5 font-mono text-lg font-bold tracking-widest text-lime">{v.code}</span>
@@ -417,7 +444,7 @@ const Account = () => {
             <div className="grid gap-2 sm:grid-cols-2">
               {account.earn_rules.map((e) => (
                 <div key={e.action_type} className="flex items-center justify-between rounded-2xl bg-cream/[0.04] px-4 py-3 text-sm">
-                  <span className="text-cream/80">{e.label}</span>
+                  <span className="text-cream/80">{tr(e.label)}</span>
                   <span className="rounded-full bg-lime/15 px-2.5 py-0.5 font-bold text-lime">+{e.points}</span>
                 </div>
               ))}
