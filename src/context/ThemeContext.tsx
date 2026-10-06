@@ -14,11 +14,9 @@ type ThemeCtx = { style: Style; setStyle: (s: Style) => void; toggle: () => void
 
 const Ctx = createContext<ThemeCtx>({ style: "tropical", setStyle: () => {}, toggle: () => {} });
 
-const read = (): Style => {
-  if (typeof window === "undefined") return "tropical";
-  const v = window.localStorage.getItem(KEY);
-  return v === "bazaar" ? "bazaar" : "tropical";
-};
+// The style switcher is removed from the site: everyone gets "tropical", even a visitor who
+// once picked "bazaar" (it was saved in their browser). The Bazaar style code is kept.
+const read = (): Style => "tropical";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [style, setStyleState] = useState<Style>(read);

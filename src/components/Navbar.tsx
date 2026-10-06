@@ -9,7 +9,6 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import Magnetic from "./Magnetic";
 import LanguageSelector from "./LanguageSelector";
-import ThemeSwitcher from "./ThemeSwitcher";
 import { STORY_LIVE } from "@/data/story";
 const logo = "/assets/brand/kokoland-logo-wide.png";
 const logoMark = "/assets/brand/kokoland-mark.png";
@@ -85,7 +84,6 @@ const Navbar = () => {
             </nav>
 
             <div className="flex items-center gap-2">
-              <ThemeSwitcher />
               <LanguageSelector />
               <Link
                 href={session ? "/account" : "/auth"}

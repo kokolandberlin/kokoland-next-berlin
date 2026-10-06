@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, LayoutGrid, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -53,8 +55,13 @@ export default function CategorySheet({
   const { i18n } = useTranslation();
   const de = (i18n.language || "en").startsWith("de");
   const dialogRef = useModalA11y(open, onClose);
+  // Rendered on <body>: the sticky category bar has a blur filter, which would otherwise
+  // trap a fixed-position sheet inside the bar instead of covering the page.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <>
@@ -133,6 +140,7 @@ export default function CategorySheet({
           </div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
